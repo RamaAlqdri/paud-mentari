@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function KontakPage() {
   return (
     <div className="py-16 md:py-24">
-      <div className="container px-4 md:px-8">
+      <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Hubungi Kami</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

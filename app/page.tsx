@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-brand-yellow/10 py-20 md:py-32">
-        <div className="container px-4 md:px-8 text-center">
+        <div className="container mx-auto px-4 md:px-8 text-center">
           <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-brand-orange text-white hover:bg-brand-orange/80 mb-6">
             Pendaftaran 2026/2027 Telah Dibuka
           </div>
@@ -36,7 +36,7 @@ export default function Home() {
 
       {/* Nilai Utama */}
       <section className="py-20 bg-background">
-        <div className="container px-4 md:px-8">
+        <div className="container mx-auto px-4 md:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Mengapa Memilih PAUD Mentari?</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">Kami mengedepankan pendidikan berbasis karakter dan kebahagiaan anak.</p>
@@ -64,7 +64,7 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 bg-brand-blue/10 relative overflow-hidden">
-        <div className="container px-4 md:px-8 text-center relative z-10">
+        <div className="container mx-auto px-4 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Siap Bergabung dengan Keluarga Mentari?</h2>
           <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
             Jangan lewatkan kesempatan untuk memberikan awal yang terbaik bagi pendidikan anak Anda. Kuota terbatas!

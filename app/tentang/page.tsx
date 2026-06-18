@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function TentangPage() {
   return (
     <div className="py-16 md:py-24">
-      <div className="container px-4 md:px-8 max-w-4xl mx-auto">
+      <div className="container mx-auto px-4 md:px-8 max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-12">Tentang PAUD Mentari</h1>
         
         <div className="space-y-16">

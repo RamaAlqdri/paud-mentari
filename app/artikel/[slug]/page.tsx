@@ -46,7 +46,7 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="py-16 md:py-24 bg-background min-h-screen">
-      <div className="container px-4 md:px-8 max-w-3xl mx-auto">
+      <div className="container mx-auto px-4 md:px-8 max-w-3xl mx-auto">
         <Link href="/artikel" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-orange transition-colors mb-8">
           <ArrowLeft className="mr-2 h-4 w-4" /> Kembali ke Artikel
         </Link>

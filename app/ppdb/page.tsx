@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PPDBPage() {
   return (
     <div className="py-16 md:py-24 bg-slate-50 min-h-screen">
-      <div className="container px-4 md:px-8 max-w-3xl mx-auto">
+      <div className="container mx-auto px-4 md:px-8 max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-brand-orange text-white mb-6">
             Pendaftaran 2026/2027

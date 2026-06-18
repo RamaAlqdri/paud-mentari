@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${poppins.variable} font-sans`}>
-      <body className="antialiased min-h-screen flex flex-col">
+      <body suppressHydrationWarning className="antialiased min-h-screen flex flex-col">
         <Providers>
           <Navbar />
           <main className="flex-1">

@@ -18,7 +18,7 @@ export default async function ArtikelPage() {
 
   return (
     <div className="py-16 md:py-24 bg-slate-50 min-h-screen">
-      <div className="container px-4 md:px-8 max-w-5xl mx-auto">
+      <div className="container mx-auto px-4 md:px-8 max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Artikel & Berita</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
