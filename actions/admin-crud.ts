@@ -86,3 +86,42 @@ export async function deleteGuru(id: string) {
     return { success: false, message: "Gagal menghapus." };
   }
 }
+
+// ==================== ARTIKEL ====================
+export async function createArtikel(formData: FormData) {
+  const title = formData.get("title") as string;
+  const excerpt = formData.get("excerpt") as string;
+  const content = formData.get("content") as string;
+  
+  if (!title || !excerpt || !content) return { success: false, message: "Judul, ringkasan, dan konten wajib diisi." };
+
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+  try {
+    await prisma.article.create({ 
+      data: { 
+        title, 
+        slug, 
+        excerpt, 
+        content,
+        publishedAt: new Date(),
+      } 
+    });
+    revalidatePath("/admin/artikel");
+    revalidatePath("/artikel");
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Terjadi kesalahan atau judul/slug duplikat." };
+  }
+}
+
+export async function deleteArtikel(id: string) {
+  try {
+    await prisma.article.delete({ where: { id } });
+    revalidatePath("/admin/artikel");
+    revalidatePath("/artikel");
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Gagal menghapus." };
+  }
+}
