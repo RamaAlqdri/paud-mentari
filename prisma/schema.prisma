@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RegistrationStatus {
+  MENUNGGU
+  DITERIMA
+  DITOLAK
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Teacher {
+  id       String  @id @default(uuid())
+  name     String
+  position String
+  photo    String?
+  bio      String?
+}
+
+model Program {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String  @unique
+  description String
+  thumbnail   String?
+}
+
+model Facility {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  image       String?
+}
+
+model Article {
+  id          String    @id @default(uuid())
+  title       String
+  slug        String    @unique
+  excerpt     String
+  content     String
+  thumbnail   String?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model PPDB {
+  id         String             @id @default(uuid())
+  childName  String
+  nik        String             @unique
+  birthPlace String
+  birthDate  DateTime
+  gender     String
+  parentName String
+  phone      String
+  email      String?
+  address    String
+  status     RegistrationStatus @default(MENUNGGU)
+  createdAt  DateTime           @default(now())
+}

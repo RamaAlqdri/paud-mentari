@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paud_mentari_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/paud_mentari_db?schema=public
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your_production_secret_here
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - paud_mentari_network
+
+  db:
+    image: postgres:15-alpine
+    container_name: paud_mentari_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=paud_mentari_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - paud_mentari_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d paud_mentari_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - paud_mentari_network
+
+networks:
+  paud_mentari_network:
+    driver: bridge
+
+volumes:
+  paud_mentari_pgdata:
