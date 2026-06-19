@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { LayoutDashboard, Users, BookOpen, Building, FileText, Settings, LogOut } from "lucide-react";
 import AdminLogoutButton from "./logout-button";
+import Image from "next/image";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
@@ -28,9 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="w-64 bg-white border-r fixed h-full flex flex-col z-20">
         <div className="h-16 flex items-center px-6 border-b">
           <Link href="/admin" className="font-bold text-lg text-brand-orange flex items-center gap-2">
-            <div className="h-8 w-8 rounded bg-brand-yellow flex items-center justify-center text-foreground text-sm">
-              M
-            </div>
+            <Image src="/logo.png" alt="Logo" width={28} height={28} className="rounded-md object-cover" />
             PAUD Mentari
           </Link>
         </div>

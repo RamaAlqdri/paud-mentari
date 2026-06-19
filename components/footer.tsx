@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 export function Footer() {
   const pathname = usePathname()
@@ -15,9 +16,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="h-8 w-8 rounded-full bg-brand-yellow flex items-center justify-center font-bold text-foreground">
-                M
-              </div>
+              <Image src="/logo.png" alt="Logo PAUD Mentari" width={32} height={32} className="rounded-full object-cover" />
               <span className="font-bold text-lg">PAUD Mentari</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
