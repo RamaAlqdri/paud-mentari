@@ -1,80 +1,115 @@
 import Link from "next/link";
 import { Button, Card } from "@tremor/react";
-import { RiBookOpenLine, RiTeamLine, RiHeartLine, RiStarLine, RiArrowRightLine } from "@remixicon/react";
+import { RiShieldCrossLine, RiEmotionHappyLine, RiPaletteLine } from "@remixicon/react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-brand-yellow/10 py-20 md:py-32">
-        <div className="container mx-auto px-4 md:px-8 text-center">
-          <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-brand-orange text-white hover:bg-brand-orange/80 mb-6">
-            Pendaftaran 2026/2027 Telah Dibuka
+    <div className="flex flex-col min-h-screen bg-white">
+      <main className="flex-grow mt-24">
+        {/* Hero Section */}
+        <section className="px-6 py-16 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+          <div className="w-full md:w-1/2 flex flex-col gap-8">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-orange leading-tight">
+              Bermain, Belajar, dan Tumbuh Bersama PAUD Mentari
+            </h1>
+            <p className="text-lg text-gray-700">
+              Lingkungan yang aman, hangat, dan menyenangkan bagi si kecil untuk mengeksplorasi potensi terbaik mereka melalui metode pembelajaran yang interaktif.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Link href="/ppdb">
+                <Button size="xl" className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-8 py-4 font-semibold shadow-sm transition-all">
+                  Mulai Sekarang
+                </Button>
+              </Link>
+              <Link href="/program">
+                <Button size="xl" variant="secondary" className="w-full sm:w-auto bg-gray-50 text-brand-orange border-2 border-brand-yellow px-8 py-4 rounded-2xl font-semibold hover:bg-brand-yellow/20 transition-all">
+                  Lihat Program
+                </Button>
+              </Link>
+            </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6">
-            Membangun Karakter, <br className="hidden md:block" />
-            <span className="text-brand-orange">Mencerahkan Masa Depan</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-            PAUD Mentari hadir dengan pendekatan belajar yang menyenangkan, interaktif, dan penuh kasih sayang untuk pertumbuhan optimal anak Anda.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/ppdb">
-              <Button size="xl" className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full shadow-sm">
-                Daftar Sekarang <RiArrowRightLine className="inline-block ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/tentang">
-              <Button size="xl" variant="secondary" className="w-full sm:w-auto rounded-full px-8 border-gray-300">
-                Kenali Kami Lebih Dekat
-              </Button>
-            </Link>
+          <div className="w-full md:w-1/2 relative">
+            <div className="absolute inset-0 bg-brand-yellow rounded-3xl transform rotate-3 opacity-20"></div>
+            <img 
+              className="relative w-full h-[500px] object-cover rounded-3xl shadow-lg border-4 border-white z-10" 
+              alt="Anak-anak belajar dan bermain"
+              src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            />
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Nilai Utama */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Mengapa Memilih PAUD Mentari?</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Kami mengedepankan pendidikan berbasis karakter dan kebahagiaan anak.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: RiBookOpenLine, title: "Kurikulum Modern", desc: "Menggabungkan kurikulum nasional dengan metode montessori.", color: "text-brand-blue" },
-              { icon: RiHeartLine, title: "Penuh Kasih", desc: "Lingkungan belajar yang aman, nyaman, dan mendukung mental anak.", color: "text-brand-pink" },
-              { icon: RiTeamLine, title: "Guru Profesional", desc: "Dididik oleh pendidik berpengalaman dan bersertifikasi.", color: "text-brand-orange" },
-              { icon: RiStarLine, title: "Fasilitas Lengkap", desc: "Area bermain indoor dan outdoor yang memadai.", color: "text-brand-yellow" },
-            ].map((item, i) => (
-              <Card key={i} className="border-none shadow-sm hover:shadow-md transition-shadow group">
-                <div className="pt-2 text-center flex flex-col items-center">
-                  <div className={`p-4 rounded-full bg-slate-50 mb-4 group-hover:scale-110 transition-transform ${item.color}`}>
-                    <item.icon className="h-8 w-8" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2 text-foreground">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+        {/* Feature Section */}
+        <section className="bg-gray-50 py-16">
+          <div className="px-6 max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-brand-orange mb-4">Mengapa Memilih Kami?</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">Kami berdedikasi memberikan pengalaman terbaik untuk awal kehidupan anak Anda.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Card 1 */}
+              <Card className="p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 bg-brand-yellow/20 text-brand-orange rounded-full flex items-center justify-center mb-6">
+                  <RiShieldCrossLine className="w-8 h-8" />
                 </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Fasilitas Aman</h3>
+                <p className="text-gray-600">
+                  Lingkungan belajar yang didesain khusus mengutamakan keamanan dan kenyamanan anak dalam setiap aktivitas fisik maupun kognitif.
+                </p>
               </Card>
-            ))}
+              {/* Card 2 */}
+              <Card className="p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 bg-brand-blue/20 text-brand-blue rounded-full flex items-center justify-center mb-6">
+                  <RiEmotionHappyLine className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Pendidik Ramah</h3>
+                <p className="text-gray-600">
+                  Guru-guru yang berpengalaman, penuh kasih sayang, dan terlatih untuk mendampingi masa emas perkembangan anak Anda.
+                </p>
+              </Card>
+              {/* Card 3 */}
+              <Card className="p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 bg-brand-pink/20 text-brand-pink rounded-full flex items-center justify-center mb-6">
+                  <RiPaletteLine className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Kurikulum Kreatif</h3>
+                <p className="text-gray-600">
+                  Metode pembelajaran inovatif yang merangsang kreativitas, imajinasi, dan keterampilan sosial melalui bermain sambil belajar.
+                </p>
+              </Card>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-brand-blue/10 relative overflow-hidden">
-        <div className="container mx-auto px-4 md:px-8 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Siap Bergabung dengan Keluarga Mentari?</h2>
-          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Jangan lewatkan kesempatan untuk memberikan awal yang terbaik bagi pendidikan anak Anda. Kuota terbatas!
-          </p>
-          <Link href="/ppdb">
-            <Button size="xl" className="bg-brand-blue hover:bg-brand-blue/90 text-white rounded-full px-10 shadow-md">
-              Mulai Pendaftaran Online
-            </Button>
-          </Link>
-        </div>
-      </section>
+        {/* Teachers Section */}
+        <section className="bg-white py-16">
+          <div className="px-6 max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-brand-orange mb-4">Pendidik Kami</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">Mengenal Tim Pengajar Kami yang berdedikasi dalam membimbing tumbuh kembang buah hati Anda.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Teacher Card 1 */}
+              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ibu Siti" className="w-full h-64 object-cover rounded-xl mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Ibu Siti</h3>
+                <p className="text-gray-600">Kepala Sekolah</p>
+              </Card>
+              {/* Teacher Card 2 */}
+              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pak Budi" className="w-full h-64 object-cover rounded-xl mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Pak Budi</h3>
+                <p className="text-gray-600">Guru Kelas TK A</p>
+              </Card>
+              {/* Teacher Card 3 */}
+              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ibu Ani" className="w-full h-64 object-cover rounded-xl mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Ibu Ani</h3>
+                <p className="text-gray-600">Guru Kelas TK B</p>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

@@ -23,40 +23,36 @@ export function Navbar() {
   if (pathname?.startsWith("/admin")) return null
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center px-4 md:px-8">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          {/* Ganti dengan file logo landscape Anda di dalam folder public */}
+    <header className="bg-white shadow-sm fixed top-0 w-full z-50">
+      <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+        <Link href="/" className="flex items-center">
           <Image src="/logo-landscape.png" alt="Logo PAUD Mentari" width={180} height={40} className="object-contain" priority />
         </Link>
-        <nav className="hidden md:flex flex-1 items-center space-x-6 text-sm font-medium">
+        <nav className="hidden md:flex items-center gap-6">
           {routes.map((route) => (
             <Link
               key={route.href}
               href={route.href}
               className={cn(
-                "transition-colors hover:text-brand-orange",
+                "px-3 py-2 rounded-lg text-sm transition-all",
                 pathname === route.href
-                  ? "text-foreground font-semibold"
-                  : "text-foreground/60"
+                  ? "text-brand-orange font-bold border-b-2 border-brand-orange pb-1 rounded-none"
+                  : "text-gray-600 hover:text-brand-orange hover:bg-gray-50 font-medium"
               )}
             >
               {route.label}
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
-            <Link href="/ppdb">
-              <Button className="hidden md:inline-flex bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold shadow-sm">
-                Daftar Sekarang
-              </Button>
-            </Link>
-            <Button variant="light" className="md:hidden">
-              <RiMenuLine className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
+        <div className="flex items-center space-x-4">
+          <Link href="/ppdb" className="hidden md:block">
+            <Button className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-6 py-3 font-semibold transition-all hover:scale-95 duration-200">
+              Daftar Sekarang
             </Button>
-          </nav>
+          </Link>
+          <Button variant="light" className="md:hidden text-brand-orange">
+             <RiMenuLine className="h-6 w-6" />
+          </Button>
         </div>
       </div>
     </header>
