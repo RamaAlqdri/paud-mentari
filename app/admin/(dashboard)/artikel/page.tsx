@@ -1,11 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { Table, TableBody, TableCell, TableHead as TableHeaderCell, TableHead, TableRow } from "@tremor/react";
-import { Card } from "@tremor/react";
-import { Button } from "@tremor/react";
-import { TextInput } from "@tremor/react";
-import { createArtikel, deleteArtikel } from "@/actions/admin-crud";
-import { format } from "date-fns";
-import { id as localeID } from "date-fns/locale";
+import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell } from "@tremor/react";
+import ArticleFilters from "./article-filters";
+import ArticleActions from "./article-actions";
 
 export default async function AdminArtikelPage() {
   const data = await prisma.article.findMany({
@@ -13,97 +9,67 @@ export default async function AdminArtikelPage() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Manajemen Artikel & Berita</h1>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Card className="border-none shadow-sm">
-            <div className="mb-4 pb-3">
-              <h3 className="text-xl font-semibold">Daftar Publikasi</h3>
-            </div>
-            <div>
-              <div className="rounded-md border overflow-x-auto">
-                <Table>
-                  <TableHeaderCell>
-                    <TableRow className="bg-slate-50">
-                      <TableHeaderCell>Judul Artikel</TableHeaderCell>
-                      <TableHeaderCell>Tgl. Terbit</TableHeaderCell>
-                      <TableHeaderCell className="w-[100px] text-right">Aksi</TableHeaderCell>
-                    </TableRow>
-                  </TableHeaderCell>
-                  <TableBody>
-                    {data.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={3} className="text-center text-muted-foreground h-24">Belum ada artikel.</TableCell>
-                      </TableRow>
-                    ) : (
-                      data.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell className="font-medium">
-                            {item.title}
-                            <div className="text-xs text-slate-500 font-normal mt-1">{item.slug}</div>
-                          </TableCell>
-                          <TableCell className="text-sm text-slate-500 whitespace-nowrap">
-                            {format(new Date(item.createdAt), "dd MMM yyyy", { locale: localeID })}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <form action={async () => {
-                              "use server";
-                              await deleteArtikel(item.id);
-                            }}>
-                              <Button type="submit" variant="secondary" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700" size="sm">Hapus</Button>
-                            </form>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </Card>
-        </div>
-
+    <div className="max-w-7xl mx-auto space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <Card className="border-none shadow-sm">
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold">Tulis Artikel Baru</h3>
-            </div>
-            <div>
-              <form action={async (fd) => { await createArtikel(fd); }} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Judul</label>
-                  <TextInput name="title" required placeholder="Contoh: Kegiatan Porseni 2026" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Ringkasan (Excerpt)</label>
-                  <textarea 
-                    name="excerpt" 
-                    required 
-                    rows={2}
-                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    placeholder="Kalimat singkat pemancing minat..."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Konten Penuh</label>
-                  <textarea 
-                    name="content" 
-                    required 
-                    rows={8}
-                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    placeholder="Isi artikel..."
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white">Terbitkan</Button>
-              </form>
-            </div>
-          </Card>
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Manajemen Artikel</h1>
+          <p className="text-gray-600 font-medium">Kelola publikasi berita, kegiatan, dan pengumuman sekolah.</p>
         </div>
       </div>
+
+      {/* Filters & Actions */}
+      <ArticleFilters />
+
+      {/* Main Table Card */}
+      <Card className="border-none shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-0 rounded-2xl overflow-hidden ring-1 ring-gray-200">
+        <div className="overflow-x-auto">
+          <Table className="w-full">
+            <TableHead className="bg-gray-50/80 border-b border-gray-200">
+              <TableRow>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Judul Artikel</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Kategori</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Tanggal Publish</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-right text-sm">Aksi</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className="divide-y divide-gray-100">
+              {data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-gray-500 py-12">
+                    Belum ada data artikel.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                data.map((item) => (
+                  <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
+                    <TableCell className="py-4 px-6">
+                      <p className="text-gray-900 font-bold text-base">{item.title}</p>
+                      <p className="text-sm text-gray-500 mt-1 max-w-xs truncate">{item.excerpt}</p>
+                    </TableCell>
+                    <TableCell className="py-4 px-6">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold capitalize ${
+                        item.category.toLowerCase() === "pengumuman" ? "bg-red-100 text-red-800" :
+                        item.category.toLowerCase() === "akademik" ? "bg-blue-100 text-blue-800" :
+                        item.category.toLowerCase() === "kegiatan" ? "bg-emerald-100 text-emerald-800" :
+                        "bg-amber-100 text-amber-800"
+                      }`}>
+                        {item.category}
+                      </span>
+                    </TableCell>
+                    <TableCell className="py-4 px-6 text-gray-700 font-medium whitespace-nowrap">
+                      {item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-"}
+                    </TableCell>
+                    <TableCell className="py-4 px-6 text-right">
+                      <ArticleActions id={item.id} />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </Card>
     </div>
   );
 }
