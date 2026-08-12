@@ -35,7 +35,6 @@ const navItems = [
   { name: "Artikel & Berita", href: "/admin/artikel", icon: RiFileTextLine },
   { name: "Guru & Staf", href: "/admin/guru", icon: RiTeamLine },
   { name: "Program", href: "/admin/program", icon: RiBookOpenLine },
-  { name: "Fasilitas", href: "/admin/fasilitas", icon: RiBuildingLine },
 ];
 
 export default function AdminLayoutShell({ children, user }: AdminLayoutShellProps) {
@@ -144,7 +143,7 @@ export default function AdminLayoutShell({ children, user }: AdminLayoutShellPro
               {isMinimized ? <RiArrowRightSLine className="w-5 h-5" /> : <RiArrowLeftSLine className="w-5 h-5" />}
             </button>
 
-            <h2 className="text-lg font-bold text-gray-800">Administrator Panel</h2>
+            <h2 className="text-md font-normal text-gray-600">Administrator Panel</h2>
           </div>
         </header>
         

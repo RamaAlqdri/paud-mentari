@@ -316,3 +316,79 @@ export async function deleteArtikel(id: string) {
     return { success: false, message: "Gagal menghapus." };
   }
 }
+
+// ==================== SISWA ====================
+export async function updateSiswa(id: string, formData: FormData) {
+  const childName = formData.get("childName") as string;
+  const nik = formData.get("nik") as string;
+  const birthPlace = formData.get("birthPlace") as string;
+  const birthDateStr = formData.get("birthDate") as string;
+  const gender = formData.get("gender") as string;
+  const parentName = formData.get("parentName") as string;
+  const phone = formData.get("phone") as string;
+  const email = formData.get("email") as string;
+  const address = formData.get("address") as string;
+  const imageFile = formData.get("image") as File | null;
+  
+  if (!childName || !nik || !parentName) return { success: false, message: "Nama anak, NIK, dan Nama Orang Tua wajib diisi." };
+
+  let imagePath = undefined;
+  if (imageFile && imageFile.size > 0) {
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const ext = path.extname(imageFile.name) || ".jpg";
+    const filename = `siswa-${nik}-${Date.now()}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+    
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+    imagePath = `/uploads/${filename}`;
+  }
+
+  try {
+    const updateData: any = { 
+      childName, 
+      nik, 
+      birthPlace,
+      gender,
+      parentName,
+      phone,
+      email: email || null,
+      address,
+      birthDate: birthDateStr ? new Date(birthDateStr) : undefined,
+    };
+
+    if (imagePath) {
+      updateData.image = imagePath;
+    }
+
+    await prisma.student.update({ 
+      where: { id },
+      data: updateData
+    });
+    
+    revalidatePath("/admin/siswa");
+    revalidatePath(`/admin/siswa/${id}`);
+    return { success: true };
+  } catch (err: any) {
+    if (err.code === 'P2002') {
+      return { success: false, message: "NIK sudah terdaftar pada siswa lain." };
+    }
+    return { success: false, message: "Terjadi kesalahan saat memperbarui data siswa." };
+  }
+}
+
+export async function toggleSiswaStatus(id: string, currentStatus: boolean) {
+  try {
+    await prisma.student.update({
+      where: { id },
+      data: { isActive: !currentStatus }
+    });
+    revalidatePath("/admin/siswa");
+    revalidatePath(`/admin/siswa/${id}`);
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Gagal mengubah status." };
+  }
+}

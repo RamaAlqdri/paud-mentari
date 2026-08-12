@@ -46,6 +46,21 @@ export default function StudentFilters() {
     });
   };
 
+  const handleYearChange = (year: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (year && year !== "all") {
+      params.set("year", year);
+    } else {
+      params.delete("year");
+    }
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
+  };
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => (currentYear - 2 + i).toString());
+
   return (
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between items-center">
       <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
@@ -59,6 +74,18 @@ export default function StudentFilters() {
           />
         </div>
         
+        <Select 
+          className="w-full sm:w-36" 
+          placeholder="Tahun Masuk"
+          value={searchParams.get("year")?.toString() || "all"}
+          onValueChange={handleYearChange}
+        >
+          <SelectItem value="all">Semua Tahun</SelectItem>
+          {years.map(year => (
+            <SelectItem key={year} value={year}>{year}</SelectItem>
+          ))}
+        </Select>
+
         <Select 
           className="w-full sm:w-40" 
           placeholder="Jenis Kelamin"
