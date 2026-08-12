@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button, Card } from "@tremor/react";
 import { RiShieldCrossLine, RiEmotionHappyLine, RiPaletteLine } from "@remixicon/react";
+import HeroCarousel from "@/components/hero-carousel";
 
 export default function Home() {
   return (
@@ -30,11 +31,7 @@ export default function Home() {
           </div>
           <div className="w-full md:w-1/2 relative">
             <div className="absolute inset-0 bg-brand-yellow rounded-3xl transform rotate-3 opacity-20"></div>
-            <img 
-              className="relative w-full h-[500px] object-cover rounded-3xl shadow-lg border-4 border-white z-10" 
-              alt="Anak-anak belajar dan bermain"
-              src="/dashboard-hero.jpeg" 
-            />
+            <HeroCarousel />
           </div>
         </section>
 
