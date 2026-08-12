@@ -49,12 +49,12 @@ export default async function AdminArtikelPage() {
                     </TableCell>
                     <TableCell className="py-4 px-6">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold capitalize ${
-                        item.category.toLowerCase() === "pengumuman" ? "bg-red-100 text-red-800" :
-                        item.category.toLowerCase() === "akademik" ? "bg-blue-100 text-blue-800" :
-                        item.category.toLowerCase() === "kegiatan" ? "bg-emerald-100 text-emerald-800" :
+                        item.category?.toLowerCase() === "pengumuman" ? "bg-red-100 text-red-800" :
+                        item.category?.toLowerCase() === "akademik" ? "bg-blue-100 text-blue-800" :
+                        item.category?.toLowerCase() === "kegiatan" ? "bg-emerald-100 text-emerald-800" :
                         "bg-amber-100 text-amber-800"
                       }`}>
-                        {item.category}
+                        {item.category || "Umum"}
                       </span>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-gray-700 font-medium whitespace-nowrap">

@@ -28,8 +28,8 @@ export function ConfirmationModal({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
       {/* Modal Container */}
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-gray-200 animate-in fade-in zoom-in duration-200">
-        <div className="flex flex-col items-center text-center">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-gray-200 animate-in fade-in zoom-in duration-200 whitespace-normal text-center">
+        <div className="flex flex-col items-center">
           
           {/* Warning Icon */}
           <div className="w-16 h-16 rounded-full bg-brand-yellow/20 flex items-center justify-center mb-6">

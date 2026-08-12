@@ -96,6 +96,59 @@ async function main() {
     });
   }
   
+  // Seed Artikel
+  const articleData = [
+    {
+      title: 'Penerimaan Siswa Baru Tahun Ajaran 2026/2027',
+      slug: 'penerimaan-siswa-baru-2026',
+      excerpt: 'PAUD Mentari membuka pendaftaran siswa baru untuk tahun ajaran 2026/2027.',
+      content: 'PAUD Mentari kini membuka pendaftaran... (konten panjang di sini)',
+      category: 'Pengumuman',
+      publishedAt: new Date('2026-01-10'),
+    },
+    {
+      title: 'Lomba Mewarnai Tingkat Kecamatan',
+      slug: 'lomba-mewarnai-kecamatan',
+      excerpt: 'Siswa-siswi PAUD Mentari akan mengikuti lomba mewarnai tingkat kecamatan.',
+      content: 'Dalam rangka memperingati Hari Anak Nasional...',
+      category: 'Kegiatan',
+      publishedAt: new Date('2026-03-15'),
+    },
+    {
+      title: 'Perubahan Jadwal Belajar Selama Bulan Ramadhan',
+      slug: 'jadwal-belajar-ramadhan-2026',
+      excerpt: 'Penyesuaian jam belajar mengajar selama bulan suci Ramadhan.',
+      content: 'Diinformasikan kepada seluruh orang tua/wali murid...',
+      category: 'Akademik',
+      publishedAt: new Date('2026-02-25'),
+    },
+    {
+      title: 'Pentingnya Sarapan Pagi Bagi Tumbuh Kembang Anak',
+      slug: 'pentingnya-sarapan-pagi',
+      excerpt: 'Tips dari ahli gizi mengenai pentingnya sarapan untuk anak usia dini.',
+      content: 'Sarapan sering disebut sebagai waktu makan paling penting...',
+      category: 'Umum',
+      publishedAt: new Date('2026-04-05'),
+    },
+    {
+      title: 'Kunjungan Edukasi ke Kebun Binatang Ragunan',
+      slug: 'kunjungan-edukasi-ragunan',
+      excerpt: 'Dokumentasi keseruan anak-anak belajar mengenal satwa.',
+      content: 'Pada hari Kamis lalu, seluruh siswa TKB melakukan kunjungan...',
+      category: 'Kegiatan',
+      publishedAt: new Date('2026-05-12'),
+    }
+  ];
+
+  for (const data of articleData) {
+    await prisma.article.upsert({
+      where: { slug: data.slug },
+      update: {},
+      create: data,
+    });
+  }
+  console.log('Article data seeded successfully');
+
   console.log('PPDB data seeded successfully');
   console.log({ admin })
 }
