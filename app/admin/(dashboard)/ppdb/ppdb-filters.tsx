@@ -10,10 +10,10 @@ export default function PPDBFilters() {
         <TextInput 
           icon={RiSearchLine} 
           placeholder="Cari nama..." 
-          className="w-full [&_input]:rounded-2xl [&>div]:rounded-2xl" 
+          className="w-full" 
         />
       </div>
-      <Select className="w-full sm:w-40 [&_button]:rounded-2xl [&>div]:rounded-2xl" placeholder="Semua Status">
+      <Select className="w-full sm:w-40" placeholder="Semua Status">
         <SelectItem value="menunggu">Menunggu</SelectItem>
         <SelectItem value="diterima">Diterima</SelectItem>
         <SelectItem value="ditolak">Ditolak</SelectItem>

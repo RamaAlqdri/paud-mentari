@@ -37,7 +37,7 @@ export default function PPDBDetailActions({ id, currentStatus }: PPDBDetailActio
     <div className="flex flex-wrap items-center gap-3">
       <button 
         onClick={handlePrint}
-        className="px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-700 font-semibold text-sm flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm"
+        className="px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 font-semibold text-sm flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm"
       >
         <RiDownload2Line className="w-4 h-4" />
         Unduh PDF
@@ -47,7 +47,7 @@ export default function PPDBDetailActions({ id, currentStatus }: PPDBDetailActio
         <button 
           onClick={() => handleUpdate("DITOLAK")}
           disabled={isUpdating}
-          className="px-4 py-2 rounded-full bg-red-600 text-white font-semibold text-sm flex items-center gap-2 hover:bg-red-700 transition-all shadow-sm disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold text-sm flex items-center gap-2 hover:bg-red-700 transition-all shadow-sm disabled:opacity-50"
         >
           <RiCloseLine className="w-4 h-4" />
           Tolak
@@ -58,7 +58,7 @@ export default function PPDBDetailActions({ id, currentStatus }: PPDBDetailActio
         <button 
           onClick={() => handleUpdate("DITERIMA")}
           disabled={isUpdating}
-          className="px-4 py-2 rounded-full bg-teal-600 text-white font-semibold text-sm flex items-center gap-2 hover:bg-teal-700 transition-all shadow-sm disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-teal-600 text-white font-semibold text-sm flex items-center gap-2 hover:bg-teal-700 transition-all shadow-sm disabled:opacity-50"
         >
           <RiCheckLine className="w-4 h-4" />
           Terima
