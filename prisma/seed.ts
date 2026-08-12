@@ -149,6 +149,55 @@ async function main() {
   }
   console.log('Article data seeded successfully');
 
+  // Seed Guru
+  const teacherData = [
+    {
+      firstName: 'Dewi',
+      lastName: 'Sartika',
+      dateOfBirth: new Date('1990-04-21'),
+      nik: '3201012104900001',
+      nip: '199004212015032001',
+      nuptk: '1234567890123456',
+      phone: '081234567890',
+      employmentStatus: 'Tetap',
+      lastEducation: 'S1 PGPAUD',
+      bio: 'Lulusan terbaik Universitas Pendidikan Indonesia. Memiliki pengalaman mengajar lebih dari 8 tahun di PAUD.',
+    },
+    {
+      firstName: 'Budi',
+      lastName: 'Santoso',
+      dateOfBirth: new Date('1985-08-15'),
+      nik: '3201011508850002',
+      nip: null,
+      nuptk: '0987654321098765',
+      phone: '085678901234',
+      employmentStatus: 'Tetap',
+      lastEducation: 'S1 Psikologi',
+      bio: 'Fokus pada perkembangan kognitif anak usia dini. Bersertifikat psikologi anak.',
+    },
+    {
+      firstName: 'Siti',
+      lastName: 'Aminah',
+      dateOfBirth: new Date('1995-12-10'),
+      nik: '3201011012950003',
+      nip: null,
+      nuptk: null,
+      phone: '089876543210',
+      employmentStatus: 'Honor',
+      lastEducation: 'S1 PGPAUD',
+      bio: 'Guru muda yang kreatif dan energik, sangat disukai oleh anak-anak Kelompok Bermain.',
+    }
+  ];
+
+  for (const data of teacherData) {
+    await prisma.teacher.upsert({
+      where: { nik: data.nik },
+      update: {},
+      create: data,
+    });
+  }
+  console.log('Teacher data seeded successfully');
+
   console.log('PPDB data seeded successfully');
   console.log({ admin })
 }

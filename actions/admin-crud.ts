@@ -63,9 +63,123 @@ export async function deleteProgram(id: string) {
 
 // ==================== GURU ====================
 export async function createGuru(formData: FormData) {
-  // Sementara dinonaktifkan logikanya karena skema Guru baru saja dirombak
-  // Form Tambah Guru belum dibuat, tapi kita biarkan kosong dulu
-  return { success: false, message: "Fungsi ini sedang diperbarui." };
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  const nik = formData.get("nik") as string;
+  const nip = formData.get("nip") as string;
+  const nuptk = formData.get("nuptk") as string;
+  const phone = formData.get("phone") as string;
+  const employmentStatus = formData.get("employmentStatus") as string || "Tetap";
+  const lastEducation = formData.get("lastEducation") as string;
+  const bio = formData.get("bio") as string;
+  const dateOfBirthStr = formData.get("dateOfBirth") as string;
+  const imageFile = formData.get("image") as File | null;
+  
+  if (!firstName || !nik) return { success: false, message: "Nama depan dan NIK wajib diisi." };
+
+  let imagePath = null;
+  if (imageFile && imageFile.size > 0) {
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const ext = path.extname(imageFile.name) || ".jpg";
+    const filename = `guru-${nik}-${Date.now()}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+    
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+    imagePath = `/uploads/${filename}`;
+  }
+
+  try {
+    await prisma.teacher.create({ 
+      data: { 
+        firstName, 
+        lastName: lastName || null, 
+        nik, 
+        nip: nip || null, 
+        nuptk: nuptk || null, 
+        phone: phone || null, 
+        employmentStatus, 
+        lastEducation: lastEducation || null, 
+        bio: bio || null, 
+        dateOfBirth: dateOfBirthStr ? new Date(dateOfBirthStr) : null,
+        image: imagePath,
+      } 
+    });
+    revalidatePath("/admin/guru");
+    revalidatePath("/guru");
+    return { success: true };
+  } catch (err: any) {
+    // Unique constraint failed on the constraint: `Teacher_nik_key`
+    if (err.code === 'P2002') {
+      return { success: false, message: "NIK sudah terdaftar di sistem." };
+    }
+    return { success: false, message: "Terjadi kesalahan internal server." };
+  }
+}
+
+export async function updateGuru(id: string, formData: FormData) {
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  const nik = formData.get("nik") as string;
+  const nip = formData.get("nip") as string;
+  const nuptk = formData.get("nuptk") as string;
+  const phone = formData.get("phone") as string;
+  const employmentStatus = formData.get("employmentStatus") as string || "Tetap";
+  const lastEducation = formData.get("lastEducation") as string;
+  const bio = formData.get("bio") as string;
+  const dateOfBirthStr = formData.get("dateOfBirth") as string;
+  const imageFile = formData.get("image") as File | null;
+  
+  if (!firstName || !nik) return { success: false, message: "Nama depan dan NIK wajib diisi." };
+
+  let imagePath = undefined;
+  if (imageFile && imageFile.size > 0) {
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const ext = path.extname(imageFile.name) || ".jpg";
+    const filename = `guru-${nik}-${Date.now()}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+    
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+    imagePath = `/uploads/${filename}`;
+  }
+
+  try {
+    const updateData: any = { 
+      firstName, 
+      lastName: lastName || null, 
+      nik, 
+      nip: nip || null, 
+      nuptk: nuptk || null, 
+      phone: phone || null, 
+      employmentStatus, 
+      lastEducation: lastEducation || null, 
+      bio: bio || null, 
+      dateOfBirth: dateOfBirthStr ? new Date(dateOfBirthStr) : null,
+    };
+
+    if (imagePath) {
+      updateData.image = imagePath;
+    }
+
+    await prisma.teacher.update({ 
+      where: { id },
+      data: updateData
+    });
+    
+    revalidatePath("/admin/guru");
+    revalidatePath("/guru");
+    return { success: true };
+  } catch (err: any) {
+    if (err.code === 'P2002') {
+      return { success: false, message: "NIK sudah terdaftar pada pengguna lain." };
+    }
+    return { success: false, message: "Terjadi kesalahan saat memperbarui data." };
+  }
 }
 
 export async function deleteGuru(id: string) {
@@ -76,6 +190,21 @@ export async function deleteGuru(id: string) {
     return { success: true };
   } catch (err) {
     return { success: false, message: "Gagal menghapus." };
+  }
+}
+
+export async function toggleGuruStatus(id: string, currentStatus: boolean) {
+  try {
+    await prisma.teacher.update({
+      where: { id },
+      data: { isActive: !currentStatus }
+    });
+    revalidatePath("/admin/guru");
+    revalidatePath("/guru");
+    revalidatePath(`/admin/guru/${id}`);
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Gagal mengubah status." };
   }
 }
 
