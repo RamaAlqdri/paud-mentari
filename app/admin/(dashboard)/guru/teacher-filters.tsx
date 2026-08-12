@@ -1,12 +1,12 @@
 "use client";
 
-import { TextInput, Select, SelectItem, DatePicker } from "@tremor/react";
+import { TextInput } from "@tremor/react";
 import { RiSearchLine, RiAddLine } from "@remixicon/react";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTransition } from "react";
 
-export default function ArticleFilters() {
+export default function TeacherFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -24,53 +24,26 @@ export default function ArticleFilters() {
     });
   };
 
-  const handleCategoryChange = (category: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (category && category !== "all") {
-      params.set("category", category);
-    } else {
-      params.delete("category");
-    }
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`);
-    });
-  };
-
   return (
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between items-center">
       <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-        <div className="relative w-full sm:w-64">
+        <div className="relative w-full sm:w-80">
           <TextInput 
             icon={RiSearchLine} 
-            placeholder="Cari judul artikel..." 
+            placeholder="Cari nama atau NIK guru..." 
             className="w-full" 
             defaultValue={searchParams.get("search")?.toString()}
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <Select 
-          className="w-full sm:w-40" 
-          placeholder="Semua Kategori"
-          value={searchParams.get("category")?.toString() || "all"}
-          onValueChange={handleCategoryChange}
-        >
-          <SelectItem value="all">Semua</SelectItem>
-          <SelectItem value="umum">Umum</SelectItem>
-          <SelectItem value="akademik">Akademik</SelectItem>
-          <SelectItem value="kegiatan">Kegiatan</SelectItem>
-          <SelectItem value="pengumuman">Pengumuman</SelectItem>
-        </Select>
-        {/* <div className="w-full sm:w-48">
-          <DatePicker className="w-full" placeholder="Tanggal Publish" />
-        </div> */}
       </div>
       
       <Link 
-        href="/admin/artikel/create"
+        href="/admin/guru/create"
         className="w-full md:w-auto px-4 py-2 rounded-lg bg-brand-orange text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-brand-orange/90 transition-all shadow-sm whitespace-nowrap"
       >
         <RiAddLine className="w-4 h-4" />
-        Tambah Artikel
+        Tambah Guru
       </Link>
     </div>
   );

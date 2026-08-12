@@ -1,92 +1,134 @@
 import { prisma } from "@/lib/prisma";
-import { Table, TableBody, TableCell, TableHead as TableHeaderCell, TableHead, TableRow } from "@tremor/react";
-import { Card } from "@tremor/react";
-import { Button } from "@tremor/react";
-import { TextInput } from "@tremor/react";
-import { createGuru, deleteGuru } from "@/actions/admin-crud";
+import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell } from "@tremor/react";
+import TeacherFilters from "./teacher-filters";
+import { RiEdit2Line, RiEyeLine, RiUser3Fill } from "@remixicon/react";
+import Link from "next/link";
+import Image from "next/image";
 
-export default async function AdminGuruPage() {
-  const data = await prisma.teacher.findMany();
+export default async function AdminGuruPage(props: { searchParams: Promise<{ search?: string }> }) {
+  const searchParams = await props.searchParams;
+  const search = searchParams.search || "";
+
+  const whereClause: any = {};
+  if (search) {
+    whereClause.OR = [
+      { firstName: { contains: search, mode: "insensitive" } },
+      { lastName: { contains: search, mode: "insensitive" } },
+      { nik: { contains: search } },
+    ];
+  }
+
+  const data = await prisma.teacher.findMany({
+    where: whereClause,
+    orderBy: { createdAt: "desc" }
+  });
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Manajemen Tenaga Pendidik</h1>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Card className="border-none shadow-sm">
-            <div className="mb-4 pb-3">
-              <h3 className="text-xl font-semibold">Daftar Guru</h3>
-            </div>
-            <div>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeaderCell>
-                    <TableRow className="bg-slate-50">
-                      <TableHeaderCell>Nama Guru</TableHeaderCell>
-                      <TableHeaderCell>Jabatan</TableHeaderCell>
-                      <TableHeaderCell className="w-[100px] text-right">Aksi</TableHeaderCell>
-                    </TableRow>
-                  </TableHeaderCell>
-                  <TableBody>
-                    {data.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={3} className="text-center text-muted-foreground">Belum ada data.</TableCell>
-                      </TableRow>
-                    ) : (
-                      data.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell className="font-medium">{item.name}</TableCell>
-                          <TableCell className="text-sm text-slate-500">{item.position}</TableCell>
-                          <TableCell className="text-right">
-                            <form action={async () => {
-                              "use server";
-                              await deleteGuru(item.id);
-                            }}>
-                              <Button type="submit" variant="secondary" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700" size="sm">Hapus</Button>
-                            </form>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </Card>
-        </div>
-
+    <div className="max-w-7xl mx-auto space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <Card className="border-none shadow-sm">
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold">Tambah Guru Baru</h3>
-            </div>
-            <div>
-              <form action={async (fd) => { await createGuru(fd); }} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Nama Lengkap</label>
-                  <TextInput name="name" required placeholder="Contoh: Siti Aminah, S.Pd" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Jabatan</label>
-                  <TextInput name="position" required placeholder="Contoh: Guru Kelas A" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Biografi Singkat</label>
-                  <textarea 
-                    name="bio" 
-                    rows={3}
-                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white">Simpan Data</Button>
-              </form>
-            </div>
-          </Card>
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Manajemen Tenaga Pendidik</h1>
+          <p className="text-gray-600 font-medium">Kelola profil, riwayat pendidikan, dan kontak guru PAUD Mentari.</p>
         </div>
       </div>
+
+      {/* Filters & Actions */}
+      <TeacherFilters />
+
+      {/* Main Table Card */}
+      <Card className="border-none shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-0 rounded-2xl overflow-hidden ring-1 ring-gray-200">
+        <div className="overflow-x-auto">
+          <Table className="w-full min-w-[800px]">
+            <TableHead className="bg-gray-50/80 border-b border-gray-200">
+              <TableRow>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nama Guru</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nomor Identitas</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Pendidikan Terakhir</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nomor Telepon</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-right text-sm">Aksi</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className="divide-y divide-gray-100">
+              {data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-gray-500 py-12">
+                    Belum ada data guru yang sesuai.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                data.map((item) => (
+                  <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
+                    {/* 1. Nama Guru (Foto Kecil + Nama Depan) */}
+                    <TableCell className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center border border-gray-200">
+                          {item.image ? (
+                            <Image 
+                              src={item.image} 
+                              alt={`Foto ${item.firstName}`} 
+                              width={40} 
+                              height={40} 
+                              className="object-cover w-full h-full"
+                            />
+                          ) : (
+                            <RiUser3Fill className="w-5 h-5 text-gray-400" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-gray-900 font-bold text-base capitalize">{item.firstName}</p>
+                          <span className="text-xs text-gray-500">{item.employmentStatus}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    
+                    {/* 2. NIP/NIK/NUPTK */}
+                    <TableCell className="py-4 px-6">
+                      <div className="flex flex-col gap-0.5">
+                        {item.nip && <span className="text-sm font-medium text-gray-900">NIP: {item.nip}</span>}
+                        {item.nuptk && <span className="text-xs text-gray-600">NUPTK: {item.nuptk}</span>}
+                        <span className="text-xs text-gray-500">NIK: {item.nik}</span>
+                      </div>
+                    </TableCell>
+
+                    {/* 3. Pendidikan Terakhir */}
+                    <TableCell className="py-4 px-6">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                        {item.lastEducation || "-"}
+                      </span>
+                    </TableCell>
+
+                    {/* 4. Nomor Telepon */}
+                    <TableCell className="py-4 px-6 text-gray-700 font-medium">
+                      {item.phone || "-"}
+                    </TableCell>
+
+                    {/* 5. Aksi: Edit & Detail */}
+                    <TableCell className="py-4 px-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link 
+                          href={`/admin/guru/${item.id}`}
+                          className="p-2 text-gray-400 hover:text-brand-orange hover:bg-brand-orange/10 rounded-lg transition-colors"
+                          title="Lihat Detail"
+                        >
+                          <RiEyeLine className="w-5 h-5" />
+                        </Link>
+                        <Link 
+                          href={`/admin/guru/${item.id}/edit`}
+                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit Guru"
+                        >
+                          <RiEdit2Line className="w-5 h-5" />
+                        </Link>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </Card>
     </div>
   );
 }

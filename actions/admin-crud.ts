@@ -63,19 +63,9 @@ export async function deleteProgram(id: string) {
 
 // ==================== GURU ====================
 export async function createGuru(formData: FormData) {
-  const name = formData.get("name") as string;
-  const position = formData.get("position") as string;
-  const bio = formData.get("bio") as string;
-  if (!name || !position) return { success: false, message: "Nama dan jabatan wajib diisi." };
-
-  try {
-    await prisma.teacher.create({ data: { name, position, bio } });
-    revalidatePath("/admin/guru");
-    revalidatePath("/guru");
-    return { success: true };
-  } catch (err) {
-    return { success: false, message: "Terjadi kesalahan." };
-  }
+  // Sementara dinonaktifkan logikanya karena skema Guru baru saja dirombak
+  // Form Tambah Guru belum dibuat, tapi kita biarkan kosong dulu
+  return { success: false, message: "Fungsi ini sedang diperbarui." };
 }
 
 export async function deleteGuru(id: string) {
@@ -132,6 +122,58 @@ export async function createArtikel(formData: FormData) {
     return { success: true };
   } catch (err) {
     return { success: false, message: "Terjadi kesalahan atau judul/slug duplikat." };
+  }
+}
+
+export async function updateArtikel(id: string, formData: FormData) {
+  const title = formData.get("title") as string;
+  const excerpt = formData.get("excerpt") as string;
+  const content = formData.get("content") as string;
+  const category = formData.get("category") as string || "Umum";
+  const thumbnailFile = formData.get("thumbnail") as File | null;
+  
+  if (!title || !excerpt || !content) return { success: false, message: "Judul, ringkasan, dan konten wajib diisi." };
+
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  let thumbnailPath = undefined;
+
+  if (thumbnailFile && thumbnailFile.size > 0) {
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const ext = path.extname(thumbnailFile.name) || ".jpg";
+    const filename = `${slug}-${Date.now()}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+    
+    const buffer = Buffer.from(await thumbnailFile.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+    thumbnailPath = `/uploads/${filename}`;
+  }
+
+  try {
+    const updateData: any = { 
+      title, 
+      slug, 
+      excerpt, 
+      content,
+      category,
+    };
+    
+    if (thumbnailPath) {
+      updateData.thumbnail = thumbnailPath;
+    }
+
+    await prisma.article.update({ 
+      where: { id },
+      data: updateData
+    });
+    
+    revalidatePath("/admin/artikel");
+    revalidatePath("/artikel");
+    revalidatePath(`/artikel/${slug}`);
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Terjadi kesalahan saat memperbarui artikel." };
   }
 }
 

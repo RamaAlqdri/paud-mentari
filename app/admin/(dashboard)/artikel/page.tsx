@@ -3,8 +3,21 @@ import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell
 import ArticleFilters from "./article-filters";
 import ArticleActions from "./article-actions";
 
-export default async function AdminArtikelPage() {
+export default async function AdminArtikelPage(props: { searchParams: Promise<{ search?: string, category?: string }> }) {
+  const searchParams = await props.searchParams;
+  const search = searchParams.search || "";
+  const category = searchParams.category || "";
+
+  const whereClause: any = {};
+  if (search) {
+    whereClause.title = { contains: search, mode: "insensitive" };
+  }
+  if (category && category !== "all") {
+    whereClause.category = category;
+  }
+
   const data = await prisma.article.findMany({
+    where: whereClause,
     orderBy: { createdAt: "desc" }
   });
 

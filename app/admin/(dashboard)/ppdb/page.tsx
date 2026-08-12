@@ -10,9 +10,24 @@ export default async function AdminPPDBPage(props: { searchParams: Promise<{ pag
   const take = 10;
   const skip = (page - 1) * take;
 
+  const search = searchParams.search || "";
+  const status = searchParams.status?.toUpperCase() as any;
+
+  const whereClause: any = {};
+  if (search) {
+    whereClause.OR = [
+      { childName: { contains: search, mode: "insensitive" } },
+      { nik: { contains: search } }
+    ];
+  }
+  if (status && status !== "ALL") {
+    whereClause.status = status;
+  }
+
   const [totalCount, pendaftar] = await Promise.all([
-    prisma.pPDB.count(),
+    prisma.pPDB.count({ where: whereClause }),
     prisma.pPDB.findMany({
+      where: whereClause,
       take,
       skip,
       orderBy: { createdAt: "desc" }

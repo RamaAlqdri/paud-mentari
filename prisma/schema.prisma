@@ -29,11 +29,20 @@ model User {
 }
 
 model Teacher {
-  id       String  @id @default(uuid())
-  name     String
-  position String
-  photo    String?
-  bio      String?
+  id               String   @id @default(cuid())
+  firstName        String
+  lastName         String?
+  dateOfBirth      DateTime?
+  nik              String   @unique
+  nip              String?
+  nuptk            String?
+  phone            String?
+  employmentStatus String   @default("Tetap")
+  lastEducation    String?
+  bio              String?
+  image            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Program {
