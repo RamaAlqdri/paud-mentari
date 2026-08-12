@@ -90,7 +90,7 @@ export default function ProgramPage() {
         <div className="mt-16 rounded-2xl overflow-hidden shadow-sm relative h-96">
           <div 
             className="bg-cover bg-center w-full h-full" 
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587691592099-24045742c181?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')" }}
+            style={{ backgroundImage: "url('/program-supportfacilities.jpeg')" }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent flex flex-col justify-end p-8">
             <h2 className="text-3xl font-bold text-white mb-2">Fasilitas Mendukung</h2>

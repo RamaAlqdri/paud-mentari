@@ -33,7 +33,7 @@ export default function Home() {
             <img 
               className="relative w-full h-[500px] object-cover rounded-3xl shadow-lg border-4 border-white z-10" 
               alt="Anak-anak belajar dan bermain"
-              src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              src="/dashboard-hero.jpeg" 
             />
           </div>
         </section>
