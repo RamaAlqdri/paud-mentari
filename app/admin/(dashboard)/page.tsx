@@ -1,4 +1,4 @@
-import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button } from "@tremor/react";
+import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge, Button, DonutChart, BarChart } from "@tremor/react";
 import { RiTeamLine, RiBookOpenLine, RiTimeLine, RiCheckboxCircleLine, RiArrowRightLine, RiEyeLine } from "@remixicon/react";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
@@ -7,6 +7,8 @@ export default async function AdminDashboard() {
   // Ambil stat dari database
   const ppdbMenunggu = await prisma.pPDB.count({ where: { status: "MENUNGGU" } });
   const ppdbDiterima = await prisma.pPDB.count({ where: { status: "DITERIMA" } });
+  const ppdbDitolak = await prisma.pPDB.count({ where: { status: "DITOLAK" } });
+  
   const totalGuru = await prisma.teacher.count();
   const totalProgram = await prisma.program.count();
   
@@ -15,12 +17,63 @@ export default async function AdminDashboard() {
     orderBy: { createdAt: 'desc' }
   });
 
+  const allPPDB = await prisma.pPDB.findMany({
+    select: { createdAt: true }
+  });
+
+  // Data untuk DonutChart
+  const ppdbStatusData = [
+    { name: "Menunggu", value: ppdbMenunggu },
+    { name: "Diterima", value: ppdbDiterima },
+    { name: "Ditolak", value: ppdbDitolak }
+  ].filter(item => item.value > 0); // Hide if 0 to make it cleaner
+
+  // Data untuk BarChart (Tren 6 Bulan Terakhir)
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"];
+  const last6MonthsData = [];
+  
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const label = `${monthNames[month]} ${year}`;
+    
+    const count = allPPDB.filter(p => {
+      const pDate = new Date(p.createdAt);
+      return pDate.getMonth() === month && pDate.getFullYear() === year;
+    }).length;
+
+    last6MonthsData.push({
+      Bulan: label,
+      "Pendaftar": count
+    });
+  }
+
   const stats = [
     { title: "Pendaftar Baru", value: ppdbMenunggu.toString(), icon: RiTimeLine, color: "text-amber-500", bg: "bg-amber-100", subtext: `${ppdbMenunggu} menunggu verifikasi` },
     { title: "Siswa Diterima", value: ppdbDiterima.toString(), icon: RiCheckboxCircleLine, color: "text-emerald-500", bg: "bg-emerald-100", subtext: "Telah diverifikasi" },
     { title: "Tenaga Pendidik", value: totalGuru.toString(), icon: RiTeamLine, color: "text-blue-500", bg: "bg-blue-100", subtext: "Guru & Staff" },
     { title: "Program Tersedia", value: totalProgram.toString(), icon: RiBookOpenLine, color: "text-purple-500", bg: "bg-purple-100", subtext: "Kelas Aktif" },
   ];
+
+  const customTooltip = (props: any) => {
+    const { payload, active } = props;
+    if (!active || !payload) return null;
+    return (
+      <div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
+        {payload.map((category: any, idx: number) => (
+          <div key={idx} className="flex flex-1 space-x-2.5">
+            <div className={`flex w-1 flex-col bg-${category.color}-500 rounded`} />
+            <div className="space-y-1">
+              <p className="text-tremor-content">{category.name}</p>
+              <p className="font-medium text-tremor-content-emphasis">{category.value}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -51,6 +104,55 @@ export default async function AdminDashboard() {
             </div>
           </Card>
         ))}
+      </div>
+
+      {/* Chart Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:col-span-1">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Status Pendaftaran</h3>
+          {ppdbStatusData.length > 0 ? (
+            <div className="flex flex-col items-center justify-center h-64">
+              <DonutChart
+                data={ppdbStatusData}
+                category="value"
+                index="name"
+                colors={["amber", "emerald", "rose"]}
+                className="h-48"
+                variant="donut"
+              />
+              <div className="flex gap-4 mt-6 flex-wrap justify-center">
+                {ppdbStatusData.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
+                    <span className={`w-3 h-3 rounded-full ${
+                      item.name === "Menunggu" ? "bg-amber-500" :
+                      item.name === "Diterima" ? "bg-emerald-500" : "bg-rose-500"
+                    }`}></span>
+                    {item.name} ({item.value})
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-64 text-gray-500">
+              Belum ada data pendaftar.
+            </div>
+          )}
+        </Card>
+
+        <Card className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:col-span-2">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Tren Pendaftaran (6 Bulan Terakhir)</h3>
+          <div className="h-64">
+            <BarChart
+              data={last6MonthsData}
+              index="Bulan"
+              categories={["Pendaftar"]}
+              colors={["orange"]}
+              className="h-full"
+              yAxisWidth={30}
+              showAnimation={true}
+            />
+          </div>
+        </Card>
       </div>
 
       {/* Recent Activity Section */}
