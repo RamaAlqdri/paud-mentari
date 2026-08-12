@@ -1,5 +1,7 @@
 "use server";
 
+import fs from "fs/promises";
+import path from "path";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
@@ -92,10 +94,26 @@ export async function createArtikel(formData: FormData) {
   const title = formData.get("title") as string;
   const excerpt = formData.get("excerpt") as string;
   const content = formData.get("content") as string;
+  const category = formData.get("category") as string || "Umum";
+  const thumbnailFile = formData.get("thumbnail") as File | null;
   
   if (!title || !excerpt || !content) return { success: false, message: "Judul, ringkasan, dan konten wajib diisi." };
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+  let thumbnailPath = null;
+
+  if (thumbnailFile && thumbnailFile.size > 0) {
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const ext = path.extname(thumbnailFile.name) || ".jpg";
+    const filename = `${slug}-${Date.now()}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+    
+    const buffer = Buffer.from(await thumbnailFile.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+    thumbnailPath = `/uploads/${filename}`;
+  }
 
   try {
     await prisma.article.create({ 
@@ -104,6 +122,8 @@ export async function createArtikel(formData: FormData) {
         slug, 
         excerpt, 
         content,
+        category,
+        thumbnail: thumbnailPath,
         publishedAt: new Date(),
       } 
     });

@@ -37,7 +37,7 @@ export default async function AdminPPDBPage(props: { searchParams: Promise<{ pag
       {/* Main Table Card */}
       <Card className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden p-0">
         <div className="overflow-x-auto">
-          <Table>
+          <Table className="w-full min-w-[900px]">
             <TableHead>
               <TableRow className="bg-gray-50/50">
                 <TableHeaderCell className="font-bold text-gray-700">Nama Anak</TableHeaderCell>

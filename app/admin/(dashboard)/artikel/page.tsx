@@ -24,7 +24,7 @@ export default async function AdminArtikelPage() {
       {/* Main Table Card */}
       <Card className="border-none shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-0 rounded-2xl overflow-hidden ring-1 ring-gray-200">
         <div className="overflow-x-auto">
-          <Table className="w-full">
+          <Table className="w-full min-w-[800px]">
             <TableHead className="bg-gray-50/80 border-b border-gray-200">
               <TableRow>
                 <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Judul Artikel</TableHeaderCell>
