@@ -36,12 +36,36 @@ export async function deleteFasilitas(id: string) {
 export async function createProgram(formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const category = formData.get("category") as string || "Intrakurikuler";
+  
   if (!title || !description) return { success: false, message: "Judul dan deskripsi wajib diisi." };
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
   try {
-    await prisma.program.create({ data: { title, slug, description } });
+    await prisma.program.create({ data: { title, slug, description, category } });
+    revalidatePath("/admin/program");
+    revalidatePath("/program");
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Terjadi kesalahan atau slug duplikat." };
+  }
+}
+
+export async function updateProgram(id: string, formData: FormData) {
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const category = formData.get("category") as string || "Intrakurikuler";
+
+  if (!title || !description) return { success: false, message: "Judul dan deskripsi wajib diisi." };
+
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+  try {
+    await prisma.program.update({
+      where: { id },
+      data: { title, slug, description, category }
+    });
     revalidatePath("/admin/program");
     revalidatePath("/program");
     return { success: true };
@@ -58,6 +82,20 @@ export async function deleteProgram(id: string) {
     return { success: true };
   } catch (err) {
     return { success: false, message: "Gagal menghapus." };
+  }
+}
+
+export async function toggleProgramStatus(id: string, currentStatus: boolean) {
+  try {
+    await prisma.program.update({
+      where: { id },
+      data: { isActive: !currentStatus }
+    });
+    revalidatePath("/admin/program");
+    revalidatePath("/program");
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Gagal memperbarui status program." };
   }
 }
 
