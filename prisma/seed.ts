@@ -89,12 +89,33 @@ async function main() {
   ];
 
   for (const data of ppdbData) {
-    await prisma.pPDB.upsert({
+    const ppdb = await prisma.pPDB.upsert({
       where: { nik: data.nik },
       update: {},
       create: data,
     });
+
+    if (ppdb.status === 'DITERIMA') {
+      await prisma.student.upsert({
+        where: { nik: ppdb.nik },
+        update: {},
+        create: {
+          nik: ppdb.nik,
+          childName: ppdb.childName,
+          birthPlace: ppdb.birthPlace,
+          birthDate: ppdb.birthDate,
+          gender: ppdb.gender,
+          parentName: ppdb.parentName,
+          phone: ppdb.phone,
+          email: ppdb.email,
+          address: ppdb.address,
+          isActive: true,
+        },
+      });
+    }
   }
+  
+  console.log('PPDB and Student data seeded successfully');
   
   // Seed Artikel
   const articleData = [
