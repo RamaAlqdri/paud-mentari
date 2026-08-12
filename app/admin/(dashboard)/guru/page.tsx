@@ -5,9 +5,10 @@ import { RiEdit2Line, RiEyeLine, RiUser3Fill } from "@remixicon/react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default async function AdminGuruPage(props: { searchParams: Promise<{ search?: string }> }) {
+export default async function AdminGuruPage(props: { searchParams: Promise<{ search?: string, status?: string }> }) {
   const searchParams = await props.searchParams;
   const search = searchParams.search || "";
+  const status = searchParams.status || "";
 
   const whereClause: any = {};
   if (search) {
@@ -16,6 +17,12 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
       { lastName: { contains: search, mode: "insensitive" } },
       { nik: { contains: search } },
     ];
+  }
+  
+  if (status === "aktif") {
+    whereClause.isActive = true;
+  } else if (status === "nonaktif") {
+    whereClause.isActive = false;
   }
 
   const data = await prisma.teacher.findMany({
@@ -43,6 +50,7 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
             <TableHead className="bg-gray-50/80 border-b border-gray-200">
               <TableRow>
                 <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nama Guru</TableHeaderCell>
+                <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Status</TableHeaderCell>
                 <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nomor Identitas</TableHeaderCell>
                 <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Pendidikan Terakhir</TableHeaderCell>
                 <TableHeaderCell className="text-gray-900 font-bold py-4 px-6 text-sm">Nomor Telepon</TableHeaderCell>
@@ -52,7 +60,7 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
             <TableBody className="divide-y divide-gray-100">
               {data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-gray-500 py-12">
+                  <TableCell colSpan={6} className="text-center text-gray-500 py-12">
                     Belum ada data guru yang sesuai.
                   </TableCell>
                 </TableRow>
@@ -69,17 +77,26 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
                               alt={`Foto ${item.firstName}`} 
                               width={40} 
                               height={40} 
-                              className="object-cover w-full h-full"
+                              className={`object-cover w-full h-full ${!item.isActive ? 'grayscale opacity-75' : ''}`}
                             />
                           ) : (
-                            <RiUser3Fill className="w-5 h-5 text-gray-400" />
+                            <RiUser3Fill className={`w-5 h-5 text-gray-400 ${!item.isActive ? 'opacity-50' : ''}`} />
                           )}
                         </div>
                         <div>
-                          <p className="text-gray-900 font-bold text-base capitalize">{item.firstName}</p>
+                          <p className={`font-bold text-base capitalize ${item.isActive ? 'text-gray-900' : 'text-gray-500 line-through'}`}>{item.firstName}</p>
                           <span className="text-xs text-gray-500">{item.employmentStatus}</span>
                         </div>
                       </div>
+                    </TableCell>
+
+                    {/* Status Aktif/Nonaktif */}
+                    <TableCell className="py-4 px-6">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        item.isActive ? "bg-emerald-100 text-emerald-800" : "bg-gray-100 text-gray-800"
+                      }`}>
+                        {item.isActive ? "Aktif" : "Nonaktif"}
+                      </span>
                     </TableCell>
                     
                     {/* 2. NIP/NIK/NUPTK */}

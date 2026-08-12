@@ -1,6 +1,6 @@
 "use client";
 
-import { TextInput } from "@tremor/react";
+import { TextInput, Select, SelectItem } from "@tremor/react";
 import { RiSearchLine, RiAddLine } from "@remixicon/react";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -24,6 +24,18 @@ export default function TeacherFilters() {
     });
   };
 
+  const handleStatusChange = (status: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (status && status !== "all") {
+      params.set("status", status);
+    } else {
+      params.delete("status");
+    }
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between items-center">
       <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
@@ -36,6 +48,16 @@ export default function TeacherFilters() {
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
+        <Select 
+          className="w-full sm:w-40" 
+          placeholder="Semua Status"
+          value={searchParams.get("status")?.toString() || "all"}
+          onValueChange={handleStatusChange}
+        >
+          <SelectItem value="all">Semua</SelectItem>
+          <SelectItem value="aktif">Aktif</SelectItem>
+          <SelectItem value="nonaktif">Nonaktif</SelectItem>
+        </Select>
       </div>
       
       <Link 
