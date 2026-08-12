@@ -16,8 +16,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Image src="/logo.png" alt="Logo PAUD Mentari" width={32} height={32} className="rounded-full object-cover" />
-              <span className="font-bold text-lg">PAUD Mentari</span>
+              <Image src="/logo-landscape.png" alt="Logo PAUD Mentari" width={180} height={40} className="object-contain" />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
               Menumbuhkan generasi cerdas, kreatif, dan berakhlak mulia dengan lingkungan belajar yang menyenangkan dan edukatif.

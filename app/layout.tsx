@@ -14,6 +14,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "PAUD Mentari | Cerdas, Kreatif, Berakhlak Mulia",
   description: "Sistem Informasi dan Website Profil PAUD Mentari",
+  icons: {
+    icon: "/logo-icon.png",
+  },
 };
 
 export default function RootLayout({
