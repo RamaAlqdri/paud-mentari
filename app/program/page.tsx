@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Card } from "@tremor/react";
+import { Card, Badge } from "@tremor/react";
 import { RiBearSmileLine, RiRocketLine, RiBookOpenLine, RiGraduationCapLine, RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
 
@@ -71,9 +71,9 @@ export default function ProgramPage() {
                 <div className={`w-16 h-16 rounded-2xl ${prog.bgColor} ${prog.color} flex items-center justify-center ${prog.hoverBg} ${prog.hoverText} transition-colors`}>
                   <prog.icon className="w-8 h-8" />
                 </div>
-                <span className="bg-gray-100 text-gray-600 font-semibold text-xs px-3 py-1 rounded-full">
+                <Badge className="bg-gray-100 text-gray-600 font-semibold text-xs px-3 py-1 rounded-full border-none">
                   {prog.age}
-                </span>
+                </Badge>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">{prog.title}</h3>
               <p className="text-gray-600 mb-8 flex-grow">

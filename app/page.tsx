@@ -109,6 +109,27 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* CTA Section (Pindah dari halaman Guru) */}
+        <section className="px-6 py-16 max-w-4xl mx-auto">
+          <Card className="text-center bg-brand-yellow/20 border-none rounded-[2rem] p-8 md:p-12 relative overflow-hidden shadow-sm">
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-orange/5 to-transparent pointer-events-none"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ingin Bertemu Langsung?</h2>
+              <p className="text-lg text-gray-700 mb-8 max-w-xl mx-auto">
+                Kami mengundang Ayah dan Bunda untuk mengunjungi fasilitas kami atau berdiskusi langsung mengenai program pendidikan yang kami tawarkan.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button size="xl" className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-8 py-4 font-semibold shadow-sm border-none w-full sm:w-auto">
+                  Kunjungi Kami
+                </Button>
+                <Button size="xl" variant="secondary" className="bg-white hover:bg-gray-50 text-brand-orange border-brand-orange/20 rounded-2xl px-8 py-4 font-semibold w-full sm:w-auto">
+                  Hubungi via WhatsApp
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </section>
       </main>
     </div>
   );
