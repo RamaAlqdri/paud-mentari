@@ -31,6 +31,7 @@ interface AdminLayoutShellProps {
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: RiDashboardLine },
   { name: "Pendaftar PPDB", href: "/admin/ppdb", icon: RiTeamLine },
+  { name: "Siswa", href: "/admin/siswa", icon: RiBookOpenLine },
   { name: "Artikel & Berita", href: "/admin/artikel", icon: RiFileTextLine },
   { name: "Guru & Staf", href: "/admin/guru", icon: RiTeamLine },
   { name: "Program", href: "/admin/program", icon: RiBookOpenLine },
