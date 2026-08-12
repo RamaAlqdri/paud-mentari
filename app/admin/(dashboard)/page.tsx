@@ -96,8 +96,9 @@ export default async function AdminDashboard() {
                           ppdb.status === "MENUNGGU" ? "amber" :
                           ppdb.status === "DITERIMA" ? "emerald" : "red"
                         }
+                        className="capitalize"
                       >
-                        {ppdb.status === "MENUNGGU" ? "Menunggu Verifikasi" : ppdb.status}
+                        {ppdb.status === "MENUNGGU" ? "Menunggu Verifikasi" : ppdb.status.toLowerCase()}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
