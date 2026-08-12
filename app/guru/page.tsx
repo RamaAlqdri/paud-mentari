@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@tremor/react";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -29,11 +29,11 @@ export default async function GuruPage() {
                 <div className="pt-8 pb-4 flex justify-center">
                   <div className="h-24 w-24 rounded-full bg-slate-200"></div>
                 </div>
-                <CardContent>
+                <div>
                   <h3 className="font-semibold text-lg">{guru.name}</h3>
                   <p className="text-sm text-brand-orange font-medium mb-3">{guru.position}</p>
                   <p className="text-xs text-muted-foreground">{guru.bio}</p>
-                </CardContent>
+                </div>
               </Card>
             ))
           )}

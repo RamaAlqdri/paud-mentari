@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead as TableHeaderCell, TableHead, TableRow } from "@tremor/react";
+import { Card } from "@tremor/react";
 import { format } from "date-fns";
 import { id as localeID } from "date-fns/locale";
 import StatusSelect from "./status-select";
@@ -17,21 +17,21 @@ export default async function AdminPPDBPage() {
       </div>
 
       <Card className="border-none shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle>Daftar Calon Peserta Didik Baru</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div className="mb-4 pb-3">
+          <h3 className="text-xl font-semibold">Daftar Calon Peserta Didik Baru</h3>
+        </div>
+        <div>
           <div className="rounded-md border">
             <Table>
-              <TableHeader>
+              <TableHeaderCell>
                 <TableRow className="bg-slate-50">
-                  <TableHead className="w-[180px]">Tgl. Daftar</TableHead>
-                  <TableHead>Nama Anak</TableHead>
-                  <TableHead>Wali</TableHead>
-                  <TableHead>Kontak</TableHead>
-                  <TableHead className="w-[150px]">Status</TableHead>
+                  <TableHeaderCell className="w-[180px]">Tgl. Daftar</TableHeaderCell>
+                  <TableHeaderCell>Nama Anak</TableHeaderCell>
+                  <TableHeaderCell>Wali</TableHeaderCell>
+                  <TableHeaderCell>Kontak</TableHeaderCell>
+                  <TableHeaderCell className="w-[150px]">Status</TableHeaderCell>
                 </TableRow>
-              </TableHeader>
+              </TableHeaderCell>
               <TableBody>
                 {pendaftar.length === 0 ? (
                   <TableRow>
@@ -63,7 +63,7 @@ export default async function AdminPPDBPage() {
               </TableBody>
             </Table>
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );

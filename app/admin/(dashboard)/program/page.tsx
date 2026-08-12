@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead as TableHeaderCell, TableHead, TableRow } from "@tremor/react";
+import { Card } from "@tremor/react";
+import { Button } from "@tremor/react";
+import { TextInput } from "@tremor/react";
 import { createProgram, deleteProgram } from "@/actions/admin-crud";
 
 export default async function AdminProgramPage() {
@@ -17,19 +17,19 @@ export default async function AdminProgramPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card className="border-none shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle>Daftar Program</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <div className="mb-4 pb-3">
+              <h3 className="text-xl font-semibold">Daftar Program</h3>
+            </div>
+            <div>
               <div className="rounded-md border">
                 <Table>
-                  <TableHeader>
+                  <TableHeaderCell>
                     <TableRow className="bg-slate-50">
-                      <TableHead>Nama Program</TableHead>
-                      <TableHead>Slug</TableHead>
-                      <TableHead className="w-[100px] text-right">Aksi</TableHead>
+                      <TableHeaderCell>Nama Program</TableHeaderCell>
+                      <TableHeaderCell>Slug</TableHeaderCell>
+                      <TableHeaderCell className="w-[100px] text-right">Aksi</TableHeaderCell>
                     </TableRow>
-                  </TableHeader>
+                  </TableHeaderCell>
                   <TableBody>
                     {data.length === 0 ? (
                       <TableRow>
@@ -45,7 +45,7 @@ export default async function AdminProgramPage() {
                               "use server";
                               await deleteProgram(item.id);
                             }}>
-                              <Button type="submit" variant="destructive" size="sm">Hapus</Button>
+                              <Button type="submit" variant="secondary" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700" size="sm">Hapus</Button>
                             </form>
                           </TableCell>
                         </TableRow>
@@ -54,20 +54,20 @@ export default async function AdminProgramPage() {
                   </TableBody>
                 </Table>
               </div>
-            </CardContent>
+            </div>
           </Card>
         </div>
 
         <div>
           <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle>Tambah Program Baru</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form action={createProgram} className="space-y-4">
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold">Tambah Program Baru</h3>
+            </div>
+            <div>
+              <form action={async (fd) => { await createProgram(fd); }} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Judul Program</label>
-                  <Input name="title" required placeholder="Contoh: Seni & Musik" />
+                  <TextInput name="title" required placeholder="Contoh: Seni & Musik" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Deskripsi Singkat</label>
@@ -80,7 +80,7 @@ export default async function AdminProgramPage() {
                 </div>
                 <Button type="submit" className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white">Simpan Data</Button>
               </form>
-            </CardContent>
+            </div>
           </Card>
         </div>
       </div>

@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card } from "@tremor/react";
+import { Button } from "@tremor/react";
+import { TextInput } from "@tremor/react";
+;
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -43,18 +43,18 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <Card className="w-full max-w-md shadow-lg border-none">
-        <CardHeader className="space-y-1 text-center">
+        <div className="mb-4 space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="h-12 w-12 rounded-full bg-brand-yellow flex items-center justify-center font-bold text-foreground text-xl">
               M
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>
+          <h3 className="text-xl font-semibold text-2xl font-bold">Admin Login</h3>
+          <p className="text-sm text-gray-500">
             Masukkan kredensial Anda untuk masuk ke sistem PAUD Mentari.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div>
           {error && (
             <div className="bg-red-50 text-red-500 text-sm p-3 rounded-md mb-4 text-center">
               {error}
@@ -62,8 +62,8 @@ export default function AdminLoginPage() {
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input 
+              <label className="text-sm font-medium block mb-1" htmlFor="email">Email</label>
+              <TextInput 
                 id="email" 
                 type="email" 
                 placeholder="admin@paudmentari.com"
@@ -73,8 +73,8 @@ export default function AdminLoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input 
+              <label className="text-sm font-medium block mb-1" htmlFor="password">Password</label>
+              <TextInput 
                 id="password" 
                 type="password"
                 value={password}
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
               {isLoading ? "Memproses..." : "Masuk ke Dashboard"}
             </Button>
           </form>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );

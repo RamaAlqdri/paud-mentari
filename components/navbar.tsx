@@ -3,8 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Menu } from "lucide-react"
+import { Button } from "@tremor/react"
+import { RiMenuLine } from "@remixicon/react"
 
 const routes = [
   { href: "/", label: "Beranda" },
@@ -54,8 +54,8 @@ export function Navbar() {
                 Daftar Sekarang
               </Button>
             </Link>
-            <Button variant="ghost" className="md:hidden">
-              <Menu className="h-5 w-5" />
+            <Button variant="light" className="md:hidden">
+              <RiMenuLine className="h-5 w-5" />
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </nav>

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { RiMapPinLine, RiPhoneLine, RiMailLine, RiTimeLine } from "@remixicon/react";
+import { Card } from "@tremor/react";
 
 export const metadata: Metadata = {
   title: "Kontak | PAUD Mentari",
@@ -21,43 +21,43 @@ export default function KontakPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div className="space-y-6">
             <Card className="border-none shadow-sm bg-slate-50">
-              <CardContent className="flex items-start gap-4 p-6">
-                <MapPin className="text-brand-orange h-6 w-6 mt-1" />
+              <div className="flex items-start gap-4 p-6">
+                <RiMapPinLine className="text-brand-orange h-6 w-6 mt-1" />
                 <div>
                   <h3 className="font-semibold text-lg">Alamat</h3>
                   <p className="text-muted-foreground mt-1">Jl. Pendidikan No. 123<br/>Kecamatan Ilmu, Kota Cerdas 12345</p>
                 </div>
-              </CardContent>
+              </div>
             </Card>
             
             <Card className="border-none shadow-sm bg-slate-50">
-              <CardContent className="flex items-start gap-4 p-6">
-                <Phone className="text-brand-blue h-6 w-6 mt-1" />
+              <div className="flex items-start gap-4 p-6">
+                <RiPhoneLine className="text-brand-blue h-6 w-6 mt-1" />
                 <div>
                   <h3 className="font-semibold text-lg">WhatsApp / Telepon</h3>
                   <p className="text-muted-foreground mt-1">+62 812 3456 7890<br/>(021) 1234567</p>
                 </div>
-              </CardContent>
+              </div>
             </Card>
 
             <Card className="border-none shadow-sm bg-slate-50">
-              <CardContent className="flex items-start gap-4 p-6">
-                <Mail className="text-brand-pink h-6 w-6 mt-1" />
+              <div className="flex items-start gap-4 p-6">
+                <RiMailLine className="text-brand-pink h-6 w-6 mt-1" />
                 <div>
                   <h3 className="font-semibold text-lg">Email</h3>
                   <p className="text-muted-foreground mt-1">info@paudmentari.com</p>
                 </div>
-              </CardContent>
+              </div>
             </Card>
 
             <Card className="border-none shadow-sm bg-slate-50">
-              <CardContent className="flex items-start gap-4 p-6">
-                <Clock className="text-brand-green h-6 w-6 mt-1" />
+              <div className="flex items-start gap-4 p-6">
+                <RiTimeLine className="text-brand-green h-6 w-6 mt-1" />
                 <div>
                   <h3 className="font-semibold text-lg">Jam Operasional</h3>
                   <p className="text-muted-foreground mt-1">Senin - Jumat: 07.00 - 14.00 WIB<br/>Sabtu - Minggu: Tutup</p>
                 </div>
-              </CardContent>
+              </div>
             </Card>
           </div>
 

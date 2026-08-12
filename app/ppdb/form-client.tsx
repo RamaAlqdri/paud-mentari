@@ -5,10 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { submitPPDB } from "@/actions/ppdb";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button, Card, TextInput } from "@tremor/react";
 
 const ppdbSchema = z.object({
   childName: z.string().min(2, "Nama Anak minimal 2 karakter"),
@@ -66,17 +63,17 @@ export default function PPDBFormClient() {
   if (resultMessage?.type === "success") {
     return (
       <Card className="border-green-200 bg-green-50">
-        <CardContent className="pt-6 text-center text-green-800">
+        <div className="pt-6 text-center text-green-800">
           <h3 className="text-xl font-bold mb-2">Pendaftaran Berhasil!</h3>
           <p>{resultMessage.text}</p>
-        </CardContent>
+        </div>
       </Card>
     );
   }
 
   return (
     <Card className="border-none shadow-md">
-      <CardContent className="pt-6">
+      <div className="pt-6">
         {resultMessage?.type === "error" && (
           <div className="bg-red-50 text-red-600 p-4 rounded-md mb-6 text-sm">
             {resultMessage.text}
@@ -89,31 +86,31 @@ export default function PPDBFormClient() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="childName">Nama Lengkap Anak</Label>
-                <Input id="childName" placeholder="Contoh: Budi Santoso" {...register("childName")} />
+                <label htmlFor="childName" className="text-sm font-medium">Nama Lengkap Anak</label>
+                <TextInput id="childName" placeholder="Contoh: Budi Santoso" {...register("childName")} />
                 {errors.childName && <p className="text-red-500 text-xs">{errors.childName.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="nik">NIK Anak (Sesuai KK)</Label>
-                <Input id="nik" type="number" placeholder="16 digit NIK" {...register("nik")} />
+                <label htmlFor="nik" className="text-sm font-medium">NIK Anak (Sesuai KK)</label>
+                <TextInput id="nik" type="number" placeholder="16 digit NIK" {...register("nik")} />
                 {errors.nik && <p className="text-red-500 text-xs">{errors.nik.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="birthPlace">Tempat Lahir</Label>
-                <Input id="birthPlace" placeholder="Contoh: Jakarta" {...register("birthPlace")} />
+                <label htmlFor="birthPlace" className="text-sm font-medium">Tempat Lahir</label>
+                <TextInput id="birthPlace" placeholder="Contoh: Jakarta" {...register("birthPlace")} />
                 {errors.birthPlace && <p className="text-red-500 text-xs">{errors.birthPlace.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="birthDate">Tanggal Lahir</Label>
-                <Input id="birthDate" type="date" {...register("birthDate")} />
+                <label htmlFor="birthDate" className="text-sm font-medium">Tanggal Lahir</label>
+                <input id="birthDate" type="date" {...register("birthDate")} className="flex h-10 w-full rounded-tremor-default border border-tremor-border bg-tremor-background px-3 py-2 text-sm shadow-tremor-input focus:border-tremor-brand-subtle focus:ring-tremor-brand-muted" />
                 {errors.birthDate && <p className="text-red-500 text-xs">{errors.birthDate.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="gender">Jenis Kelamin</Label>
+                <label htmlFor="gender" className="text-sm font-medium">Jenis Kelamin</label>
                 <select 
                   id="gender" 
                   className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -133,25 +130,25 @@ export default function PPDBFormClient() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="parentName">Nama Orang Tua</Label>
-                <Input id="parentName" placeholder="Contoh: Anton Santoso" {...register("parentName")} />
+                <label htmlFor="parentName" className="text-sm font-medium">Nama Orang Tua</label>
+                <TextInput id="parentName" placeholder="Contoh: Anton Santoso" {...register("parentName")} />
                 {errors.parentName && <p className="text-red-500 text-xs">{errors.parentName.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Nomor HP (WhatsApp)</Label>
-                <Input id="phone" type="tel" placeholder="Contoh: 081234567890" {...register("phone")} />
+                <label htmlFor="phone" className="text-sm font-medium">Nomor HP (WhatsApp)</label>
+                <TextInput id="phone" type="tel" placeholder="Contoh: 081234567890" {...register("phone")} />
                 {errors.phone && <p className="text-red-500 text-xs">{errors.phone.message}</p>}
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="email">Email (Opsional)</Label>
-                <Input id="email" type="email" placeholder="Contoh: anton@email.com" {...register("email")} />
+                <label htmlFor="email" className="text-sm font-medium">Email (Opsional)</label>
+                <TextInput id="email" type="email" placeholder="Contoh: anton@email.com" {...register("email")} />
                 {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="address">Alamat Lengkap Domisili</Label>
+                <label htmlFor="address" className="text-sm font-medium">Alamat Lengkap Domisili</label>
                 <textarea 
                   id="address" 
                   rows={3}
@@ -164,11 +161,11 @@ export default function PPDBFormClient() {
             </div>
           </div>
 
-          <Button type="submit" disabled={isSubmitting} className="w-full bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold shadow-md py-6">
+          <Button type="submit" disabled={isSubmitting} className="w-full bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold shadow-md py-3 mt-4">
             {isSubmitting ? "Memproses..." : "Kirim Formulir Pendaftaran"}
           </Button>
         </form>
-      </CardContent>
+      </div>
     </Card>
   );
 }

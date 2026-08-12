@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@tremor/react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { id as localeID } from "date-fns/locale";
-import { ArrowRight, Calendar } from "lucide-react";
+import { RiArrowRightLine, RiCalendarLine } from "@remixicon/react";
 
 export const metadata: Metadata = {
   title: "Artikel & Berita | PAUD Mentari",
@@ -35,9 +35,9 @@ export default async function ArtikelPage() {
                 <div className="h-48 bg-slate-200 w-full relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
                   <span className="text-muted-foreground font-medium text-sm">Thumbnail Artikel</span>
                 </div>
-                <CardContent className="p-6 flex-1 flex flex-col">
+                <div className="p-6 flex-1 flex flex-col">
                   <div className="flex items-center text-xs text-muted-foreground mb-3 gap-1">
-                    <Calendar className="h-3 w-3" />
+                    <RiCalendarLine className="h-3 w-3" />
                     <span>{format(new Date(article.createdAt), "dd MMMM yyyy", { locale: localeID })}</span>
                   </div>
                   <h3 className="font-bold text-xl mb-3 line-clamp-2 text-slate-800 group-hover:text-brand-orange transition-colors">
@@ -49,9 +49,9 @@ export default async function ArtikelPage() {
                     {article.excerpt}
                   </p>
                   <Link href={`/artikel/${article.slug}`} className="inline-flex items-center text-sm font-semibold text-brand-blue hover:text-brand-orange transition-colors mt-auto">
-                    Baca Selengkapnya <ArrowRight className="ml-1 h-4 w-4" />
+                    Baca Selengkapnya <RiArrowRightLine className="ml-1 h-4 w-4" />
                   </Link>
-                </CardContent>
+                </div>
               </Card>
             ))
           )}

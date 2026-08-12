@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@tremor/react";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -29,10 +29,10 @@ export default async function FasilitasPage() {
                 <div className="h-48 bg-slate-200 w-full relative overflow-hidden flex items-center justify-center">
                   <span className="text-muted-foreground">Foto {item.title}</span>
                 </div>
-                <CardContent className="p-6">
+                <div className="p-6">
                   <h3 className="font-semibold text-xl mb-2">{item.title}</h3>
                   <p className="text-muted-foreground text-sm">{item.description}</p>
-                </CardContent>
+                </div>
               </Card>
             ))
           )}

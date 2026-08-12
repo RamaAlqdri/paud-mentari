@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen } from "lucide-react";
+import { Card } from "@tremor/react";
+import { RiBookOpenLine } from "@remixicon/react";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -27,15 +27,15 @@ export default async function ProgramPage() {
           ) : (
             programData.map((program) => (
               <Card key={program.id} className="border-none shadow-sm hover:shadow-md transition-all">
-                <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                <div className="mb-4 flex flex-row items-center gap-4 pb-2">
                   <div className="p-3 rounded-xl bg-white shadow-sm text-brand-orange">
-                    <BookOpen className="h-6 w-6" />
+                    <RiBookOpenLine className="h-6 w-6" />
                   </div>
-                  <CardTitle>{program.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
+                  <h3 className="text-xl font-semibold">{program.title}</h3>
+                </div>
+                <div>
                   <p className="text-muted-foreground">{program.description}</p>
-                </CardContent>
+                </div>
               </Card>
             ))
           )}

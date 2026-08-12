@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Users, BookOpen, Building, FileText, Settings, LogOut } from "lucide-react";
+import { RiDashboardLine, RiTeamLine, RiBookOpenLine, RiBuildingLine, RiFileTextLine, RiSettings3Line, RiLogoutBoxLine } from "@remixicon/react";
 import AdminLogoutButton from "./logout-button";
 import Image from "next/image";
 
@@ -15,12 +15,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   const navItems = [
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { name: "Pendaftar PPDB", href: "/admin/ppdb", icon: Users },
-    { name: "Artikel & Berita", href: "/admin/artikel", icon: FileText },
-    { name: "Tenaga Pendidik", href: "/admin/guru", icon: Users },
-    { name: "Program", href: "/admin/program", icon: BookOpen },
-    { name: "Fasilitas", href: "/admin/fasilitas", icon: Building },
+    { name: "Dashboard", href: "/admin", icon: RiDashboardLine },
+    { name: "Pendaftar PPDB", href: "/admin/ppdb", icon: RiTeamLine },
+    { name: "Artikel & Berita", href: "/admin/artikel", icon: RiFileTextLine },
+    { name: "Guru & Staf", href: "/admin/guru", icon: RiTeamLine },
+    { name: "Program", href: "/admin/program", icon: RiBookOpenLine },
+    { name: "Fasilitas", href: "/admin/fasilitas", icon: RiBuildingLine },
   ];
 
   return (

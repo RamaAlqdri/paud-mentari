@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead as TableHeaderCell, TableHead, TableRow } from "@tremor/react";
+import { Card } from "@tremor/react";
+import { Button } from "@tremor/react";
+import { TextInput } from "@tremor/react";
 import { createGuru, deleteGuru } from "@/actions/admin-crud";
 
 export default async function AdminGuruPage() {
@@ -17,19 +17,19 @@ export default async function AdminGuruPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card className="border-none shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle>Daftar Guru</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <div className="mb-4 pb-3">
+              <h3 className="text-xl font-semibold">Daftar Guru</h3>
+            </div>
+            <div>
               <div className="rounded-md border">
                 <Table>
-                  <TableHeader>
+                  <TableHeaderCell>
                     <TableRow className="bg-slate-50">
-                      <TableHead>Nama Guru</TableHead>
-                      <TableHead>Jabatan</TableHead>
-                      <TableHead className="w-[100px] text-right">Aksi</TableHead>
+                      <TableHeaderCell>Nama Guru</TableHeaderCell>
+                      <TableHeaderCell>Jabatan</TableHeaderCell>
+                      <TableHeaderCell className="w-[100px] text-right">Aksi</TableHeaderCell>
                     </TableRow>
-                  </TableHeader>
+                  </TableHeaderCell>
                   <TableBody>
                     {data.length === 0 ? (
                       <TableRow>
@@ -45,7 +45,7 @@ export default async function AdminGuruPage() {
                               "use server";
                               await deleteGuru(item.id);
                             }}>
-                              <Button type="submit" variant="destructive" size="sm">Hapus</Button>
+                              <Button type="submit" variant="secondary" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700" size="sm">Hapus</Button>
                             </form>
                           </TableCell>
                         </TableRow>
@@ -54,24 +54,24 @@ export default async function AdminGuruPage() {
                   </TableBody>
                 </Table>
               </div>
-            </CardContent>
+            </div>
           </Card>
         </div>
 
         <div>
           <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle>Tambah Guru Baru</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form action={createGuru} className="space-y-4">
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold">Tambah Guru Baru</h3>
+            </div>
+            <div>
+              <form action={async (fd) => { await createGuru(fd); }} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Nama Lengkap</label>
-                  <Input name="name" required placeholder="Contoh: Siti Aminah, S.Pd" />
+                  <TextInput name="name" required placeholder="Contoh: Siti Aminah, S.Pd" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Jabatan</label>
-                  <Input name="position" required placeholder="Contoh: Guru Kelas A" />
+                  <TextInput name="position" required placeholder="Contoh: Guru Kelas A" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Biografi Singkat</label>
@@ -83,7 +83,7 @@ export default async function AdminGuruPage() {
                 </div>
                 <Button type="submit" className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white">Simpan Data</Button>
               </form>
-            </CardContent>
+            </div>
           </Card>
         </div>
       </div>

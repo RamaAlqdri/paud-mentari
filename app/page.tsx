@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Users, Heart, Star, ArrowRight } from "lucide-react";
+import { Button, Card } from "@tremor/react";
+import { RiBookOpenLine, RiTeamLine, RiHeartLine, RiStarLine, RiArrowRightLine } from "@remixicon/react";
 
 export default function Home() {
   return (
@@ -21,12 +20,12 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/ppdb">
-              <Button size="lg" className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full px-8 shadow-sm">
-                Daftar Sekarang <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="xl" className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full shadow-sm">
+                Daftar Sekarang <RiArrowRightLine className="inline-block ml-2 w-5 h-5" />
               </Button>
             </Link>
             <Link href="/tentang">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full px-8">
+              <Button size="xl" variant="secondary" className="w-full sm:w-auto rounded-full px-8 border-gray-300">
                 Kenali Kami Lebih Dekat
               </Button>
             </Link>
@@ -43,19 +42,19 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { icon: BookOpen, title: "Kurikulum Modern", desc: "Menggabungkan kurikulum nasional dengan metode montessori.", color: "text-brand-blue" },
-              { icon: Heart, title: "Penuh Kasih", desc: "Lingkungan belajar yang aman, nyaman, dan mendukung mental anak.", color: "text-brand-pink" },
-              { icon: Users, title: "Guru Profesional", desc: "Dididik oleh pendidik berpengalaman dan bersertifikasi.", color: "text-brand-orange" },
-              { icon: Star, title: "Fasilitas Lengkap", desc: "Area bermain indoor dan outdoor yang memadai.", color: "text-brand-yellow" },
+              { icon: RiBookOpenLine, title: "Kurikulum Modern", desc: "Menggabungkan kurikulum nasional dengan metode montessori.", color: "text-brand-blue" },
+              { icon: RiHeartLine, title: "Penuh Kasih", desc: "Lingkungan belajar yang aman, nyaman, dan mendukung mental anak.", color: "text-brand-pink" },
+              { icon: RiTeamLine, title: "Guru Profesional", desc: "Dididik oleh pendidik berpengalaman dan bersertifikasi.", color: "text-brand-orange" },
+              { icon: RiStarLine, title: "Fasilitas Lengkap", desc: "Area bermain indoor dan outdoor yang memadai.", color: "text-brand-yellow" },
             ].map((item, i) => (
               <Card key={i} className="border-none shadow-sm hover:shadow-md transition-shadow group">
-                <CardContent className="pt-6 text-center flex flex-col items-center">
+                <div className="pt-2 text-center flex flex-col items-center">
                   <div className={`p-4 rounded-full bg-slate-50 mb-4 group-hover:scale-110 transition-transform ${item.color}`}>
                     <item.icon className="h-8 w-8" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2 text-foreground">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
@@ -70,7 +69,7 @@ export default function Home() {
             Jangan lewatkan kesempatan untuk memberikan awal yang terbaik bagi pendidikan anak Anda. Kuota terbatas!
           </p>
           <Link href="/ppdb">
-            <Button size="lg" className="bg-brand-blue hover:bg-brand-blue/90 text-white rounded-full px-10 shadow-md">
+            <Button size="xl" className="bg-brand-blue hover:bg-brand-blue/90 text-white rounded-full px-10 shadow-md">
               Mulai Pendaftaran Online
             </Button>
           </Link>
