@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell } from "@tremor/react";
 import StudentFilters from "./student-filters";
-import { RiEdit2Line, RiEyeLine, RiUser3Fill } from "@remixicon/react";
-import Link from "next/link";
+import { RiUser3Fill } from "@remixicon/react";
 import Image from "next/image";
+import StudentActions from "./student-actions";
 
 export default async function AdminSiswaPage(props: { searchParams: Promise<{ search?: string, status?: string, gender?: string, year?: string }> }) {
   const searchParams = await props.searchParams;
@@ -131,9 +131,11 @@ export default async function AdminSiswaPage(props: { searchParams: Promise<{ se
                     </TableCell>
 
                     {/* 6. Status Aktif/Nonaktif */}
-                    <TableCell className="py-4 px-6">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        item.isActive ? "bg-emerald-100 text-emerald-800" : "bg-gray-100 text-gray-800"
+                    <TableCell className="py-4 px-6 text-center">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold border ${
+                        item.isActive 
+                          ? "bg-green-50 text-green-700 border-green-200" 
+                          : "bg-gray-100 text-gray-600 border-gray-200"
                       }`}>
                         {item.isActive ? "Aktif" : "Nonaktif"}
                       </span>
@@ -141,22 +143,7 @@ export default async function AdminSiswaPage(props: { searchParams: Promise<{ se
 
                     {/* 7. Aksi (Edit & Detail) */}
                     <TableCell className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link 
-                          href={`/admin/siswa/${item.id}`}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Lihat Detail"
-                        >
-                          <RiEyeLine className="w-5 h-5" />
-                        </Link>
-                        <Link 
-                          href={`/admin/siswa/${item.id}/edit`}
-                          className="p-2 text-gray-400 hover:text-brand-orange hover:bg-orange-50 rounded-lg transition-colors"
-                          title="Edit Data"
-                        >
-                          <RiEdit2Line className="w-5 h-5" />
-                        </Link>
-                      </div>
+                      <StudentActions id={item.id} isActive={item.isActive} />
                     </TableCell>
                   </TableRow>
                 ))

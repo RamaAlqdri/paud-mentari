@@ -102,11 +102,15 @@ export default async function AdminDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Link href={`/admin/ppdb`}>
-                        <button className="text-brand-orange hover:text-brand-orange/80 p-2 rounded-lg hover:bg-orange-50 transition-colors">
-                          <RiEyeLine className="w-5 h-5" />
-                        </button>
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link 
+                          href={`/admin/ppdb/${ppdb.id}`}
+                          className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200 shadow-sm"
+                          title="Lihat Detail PPDB"
+                        >
+                          <RiEyeLine className="w-4 h-4" />
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

@@ -430,3 +430,13 @@ export async function toggleSiswaStatus(id: string, currentStatus: boolean) {
     return { success: false, message: "Gagal mengubah status." };
   }
 }
+
+export async function deleteSiswa(id: string) {
+  try {
+    await prisma.student.delete({ where: { id } });
+    revalidatePath("/admin/siswa");
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: "Gagal menghapus siswa." };
+  }
+}

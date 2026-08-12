@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell } from "@tremor/react";
 import TeacherFilters from "./teacher-filters";
-import { RiEdit2Line, RiEyeLine, RiUser3Fill } from "@remixicon/react";
-import Link from "next/link";
+import { RiUser3Fill } from "@remixicon/react";
 import Image from "next/image";
+import TeacherActions from "./teacher-actions";
 
 export default async function AdminGuruPage(props: { searchParams: Promise<{ search?: string, status?: string }> }) {
   const searchParams = await props.searchParams;
@@ -91,9 +91,11 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
                     </TableCell>
 
                     {/* Status Aktif/Nonaktif */}
-                    <TableCell className="py-4 px-6">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        item.isActive ? "bg-emerald-100 text-emerald-800" : "bg-gray-100 text-gray-800"
+                    <TableCell className="py-4 px-6 text-center">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold border ${
+                        item.isActive 
+                          ? "bg-green-50 text-green-700 border-green-200" 
+                          : "bg-gray-100 text-gray-600 border-gray-200"
                       }`}>
                         {item.isActive ? "Aktif" : "Nonaktif"}
                       </span>
@@ -120,24 +122,9 @@ export default async function AdminGuruPage(props: { searchParams: Promise<{ sea
                       {item.phone || "-"}
                     </TableCell>
 
-                    {/* 5. Aksi: Edit & Detail */}
+                    {/* 6. Aksi (Edit & Detail) */}
                     <TableCell className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link 
-                          href={`/admin/guru/${item.id}`}
-                          className="p-2 text-gray-400 hover:text-brand-orange hover:bg-brand-orange/10 rounded-lg transition-colors"
-                          title="Lihat Detail"
-                        >
-                          <RiEyeLine className="w-5 h-5" />
-                        </Link>
-                        <Link 
-                          href={`/admin/guru/${item.id}/edit`}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Edit Guru"
-                        >
-                          <RiEdit2Line className="w-5 h-5" />
-                        </Link>
-                      </div>
+                      <TeacherActions id={item.id} isActive={item.isActive} />
                     </TableCell>
                   </TableRow>
                 ))

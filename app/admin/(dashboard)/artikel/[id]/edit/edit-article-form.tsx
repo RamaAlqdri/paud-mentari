@@ -6,8 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { updateArtikel } from "@/actions/admin-crud";
 import { Button, Card, TextInput } from "@tremor/react";
-import { RiCheckboxCircleFill, RiSave3Fill, RiArrowDownSLine } from "@remixicon/react";
+import { RiSave3Fill, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
+import { StatusModal } from "@/components/status-modal";
 import { useRouter } from "next/navigation";
 
 const articleSchema = z.object({
@@ -87,48 +88,31 @@ export default function EditArticleForm({ id, initialData }: EditArticleFormProp
 
   return (
     <Card className="w-full max-w-5xl bg-white rounded-2xl p-8 md:p-10 border border-gray-200 shadow-sm relative overflow-hidden mx-auto">
-      {/* Success State Overlay */}
-      {resultMessage?.type === "success" && (
-        <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-8 text-center animate-[fadeIn_0.5s_ease-out]">
-          <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
-            <RiCheckboxCircleFill className="w-10 h-10 text-emerald-600" />
-          </div>
-          <h2 className="text-3xl font-extrabold text-emerald-600 mb-4">Tersimpan!</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-md">
-            {resultMessage.text}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              onClick={() => router.push("/admin/artikel")} 
-              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl px-8 py-4 font-semibold text-base shadow-sm border-none transition-all"
-            >
-              Kembali ke Daftar Artikel
-            </Button>
-            <Button 
-              variant="secondary"
-              onClick={() => setResultMessage(null)} 
-              className="bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-2xl px-8 py-4 font-semibold text-base border border-gray-200 transition-all"
-            >
-              Lanjut Mengedit
-            </Button>
-          </div>
-        </div>
+      {/* Status Modal */}
+      {resultMessage && (
+        <StatusModal 
+          isOpen={!!resultMessage}
+          type={resultMessage.type}
+          title={resultMessage.type === "success" ? "Tersimpan!" : "Gagal"}
+          message={resultMessage.text}
+          primaryAction={{
+            label: "Kembali ke Daftar Artikel",
+            onClick: () => router.push("/admin/artikel")
+          }}
+          secondaryAction={resultMessage.type === "success" ? {
+            label: "Lanjut Mengedit",
+            onClick: () => setResultMessage(null)
+          } : {
+            label: "Tutup",
+            onClick: () => setResultMessage(null)
+          }}
+        />
       )}
-
-      {/* Form Content */}
       <div className={resultMessage?.type === "success" ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-brand-orange mb-3">Edit Artikel</h1>
           <p className="text-gray-600">Perbarui informasi, isi konten, atau gambar cover artikel ini.</p>
-        </div>
-        
-        {resultMessage?.type === "error" && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-8 text-sm border border-red-200">
-            {resultMessage.text}
-          </div>
-        )}
-
-        <form id="editArticleForm" onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+        </div>        <form id="editArticleForm" onSubmit={handleSubmit(onSubmit)} className="space-y-10">
           {/* Informasi Dasar */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Informasi Dasar</h3>

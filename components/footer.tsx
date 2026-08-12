@@ -25,10 +25,11 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Tautan Cepat</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/tentang" className="hover:text-brand-orange transition-colors">Tentang Kami</Link></li>
               <li><Link href="/program" className="hover:text-brand-orange transition-colors">Program Unggulan</Link></li>
-              <li><Link href="/fasilitas" className="hover:text-brand-orange transition-colors">Fasilitas</Link></li>
+              <li><Link href="/artikel" className="hover:text-brand-orange transition-colors">Artikel & Berita</Link></li>
+              <li><Link href="/guru" className="hover:text-brand-orange transition-colors">Tenaga Pendidik</Link></li>
               <li><Link href="/ppdb" className="hover:text-brand-orange transition-colors">Informasi Pendaftaran</Link></li>
+              <li><Link href="/tentang" className="hover:text-brand-orange transition-colors">Tentang Kami</Link></li>
             </ul>
           </div>
           <div>

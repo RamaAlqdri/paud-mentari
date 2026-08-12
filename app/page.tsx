@@ -2,8 +2,16 @@ import Link from "next/link";
 import { Button, Card } from "@tremor/react";
 import { RiShieldCrossLine, RiEmotionHappyLine, RiPaletteLine } from "@remixicon/react";
 import HeroCarousel from "@/components/hero-carousel";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  // Ambil 3 data guru terbaru untuk ditampilkan di Beranda
+  const teachers = await prisma.teacher.findMany({
+    where: { isActive: true },
+    take: 3,
+    orderBy: { createdAt: "asc" }
+  });
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-grow mt-24">
@@ -85,24 +93,23 @@ export default function Home() {
               <p className="text-gray-600 max-w-2xl mx-auto">Mengenal Tim Pengajar Kami yang berdedikasi dalam membimbing tumbuh kembang buah hati Anda.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Teacher Card 1 */}
-              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ibu Siti" className="w-full h-64 object-cover rounded-xl mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Ibu Siti</h3>
-                <p className="text-gray-600">Kepala Sekolah</p>
-              </Card>
-              {/* Teacher Card 2 */}
-              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pak Budi" className="w-full h-64 object-cover rounded-xl mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Pak Budi</h3>
-                <p className="text-gray-600">Guru Kelas TK A</p>
-              </Card>
-              {/* Teacher Card 3 */}
-              <Card className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ibu Ani" className="w-full h-64 object-cover rounded-xl mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Ibu Ani</h3>
-                <p className="text-gray-600">Guru Kelas TK B</p>
-              </Card>
+              {teachers.length === 0 ? (
+                <p className="col-span-full text-center text-gray-500">Belum ada data pendidik.</p>
+              ) : (
+                teachers.map((teacher) => (
+                  <Card key={teacher.id} className="p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow group">
+                    <div className="w-full h-64 overflow-hidden rounded-xl mb-4 bg-gray-100">
+                      <img 
+                        src={teacher.image || "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"} 
+                        alt={teacher.firstName} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{teacher.firstName} {teacher.lastName}</h3>
+                    <p className="text-gray-600">{teacher.employmentStatus}</p>
+                  </Card>
+                ))
+              )}
             </div>
           </div>
         </section>

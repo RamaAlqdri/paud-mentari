@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Card, Badge } from "@tremor/react";
-import { RiBearSmileLine, RiRocketLine, RiBookOpenLine, RiGraduationCapLine, RiArrowRightLine } from "@remixicon/react";
+import { RiBearSmileLine, RiRocketLine, RiBookOpenLine, RiGraduationCapLine } from "@remixicon/react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -8,49 +8,36 @@ export const metadata: Metadata = {
   description: "Program dan kurikulum di PAUD Mentari",
 };
 
-export default function ProgramPage() {
-  const programs = [
-    {
-      title: "Daycare",
-      age: "Usia 1-3 Tahun",
-      desc: "Layanan pengasuhan anak yang aman, nyaman, dan edukatif. Kami memastikan kebutuhan dasar, nutrisi, dan stimulasi awal anak terpenuhi selagi Anda bekerja.",
-      icon: RiBearSmileLine,
-      color: "text-brand-orange",
-      bgColor: "bg-brand-yellow/20",
-      hoverBg: "group-hover:bg-brand-orange",
+import { prisma } from "@/lib/prisma";
+
+export default async function ProgramPage() {
+  const dbPrograms = await prisma.program.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: "asc" }
+  });
+
+  const programs = dbPrograms.map((prog, index) => {
+    const icons = [RiBearSmileLine, RiRocketLine, RiBookOpenLine, RiGraduationCapLine];
+    const styles = [
+      { color: "text-brand-orange", bg: "bg-brand-yellow/20", hoverBg: "group-hover:bg-brand-orange" },
+      { color: "text-brand-blue", bg: "bg-brand-blue/10", hoverBg: "group-hover:bg-brand-blue" },
+      { color: "text-brand-pink", bg: "bg-brand-pink/10", hoverBg: "group-hover:bg-brand-pink" },
+      { color: "text-brand-yellow", bg: "bg-brand-yellow/20", hoverBg: "group-hover:bg-brand-yellow" }
+    ];
+    
+    const style = styles[index % 4];
+    
+    return {
+      title: prog.title,
+      age: prog.category, // Menggunakan kategori sebagai pengganti umur
+      desc: prog.description,
+      icon: icons[index % 4],
+      color: style.color,
+      bgColor: style.bg,
+      hoverBg: style.hoverBg,
       hoverText: "group-hover:text-white"
-    },
-    {
-      title: "Playgroup",
-      age: "Usia 3-4 Tahun",
-      desc: "Program bermain sambil belajar untuk mengembangkan keterampilan sosial, emosional, dan motorik anak melalui kegiatan interaktif dan menyenangkan.",
-      icon: RiRocketLine,
-      color: "text-brand-blue",
-      bgColor: "bg-brand-blue/10",
-      hoverBg: "group-hover:bg-brand-blue",
-      hoverText: "group-hover:text-white"
-    },
-    {
-      title: "TK A",
-      age: "Usia 4-5 Tahun",
-      desc: "Fokus pada pengenalan dasar literasi, numerasi, dan pembentukan karakter. Anak-anak mulai diajak berpikir kritis melalui metode eksplorasi.",
-      icon: RiBookOpenLine,
-      color: "text-brand-pink",
-      bgColor: "bg-brand-pink/10",
-      hoverBg: "group-hover:bg-brand-pink",
-      hoverText: "group-hover:text-white"
-    },
-    {
-      title: "TK B",
-      age: "Usia 5-6 Tahun",
-      desc: "Persiapan matang menuju sekolah dasar. Menekankan pada kemandirian, kepercayaan diri, dan penguatan keterampilan akademik dasar secara seimbang.",
-      icon: RiGraduationCapLine,
-      color: "text-brand-yellow",
-      bgColor: "bg-brand-yellow/20",
-      hoverBg: "group-hover:bg-brand-yellow",
-      hoverText: "group-hover:text-white"
-    }
-  ];
+    };
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-white pt-24">
@@ -79,9 +66,6 @@ export default function ProgramPage() {
               <p className="text-gray-600 mb-8 flex-grow">
                 {prog.desc}
               </p>
-              <Link href="/ppdb" className="inline-flex items-center font-semibold text-brand-orange hover:text-brand-orange/80 transition-colors mt-auto">
-                Pelajari lebih lanjut <RiArrowRightLine className="ml-1 w-4 h-4" />
-              </Link>
             </Card>
           ))}
         </div>

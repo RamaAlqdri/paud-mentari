@@ -6,8 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { createArtikel } from "@/actions/admin-crud";
 import { Button, Card, TextInput } from "@tremor/react";
-import { RiCheckboxCircleFill, RiSendPlaneFill, RiArrowDownSLine } from "@remixicon/react";
+import { RiSendPlaneFill, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
+import { StatusModal } from "@/components/status-modal";
 import { useRouter } from "next/navigation";
 
 const articleSchema = z.object({
@@ -64,45 +65,31 @@ export default function ArticleForm() {
 
   return (
     <Card className="w-full max-w-5xl bg-white rounded-2xl p-8 md:p-10 border border-gray-200 shadow-sm relative overflow-hidden mx-auto">
-      {/* Success State Overlay */}
-      {resultMessage?.type === "success" && (
-        <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-8 text-center animate-[fadeIn_0.5s_ease-out]">
-          <div className="w-20 h-20 bg-brand-yellow/20 rounded-full flex items-center justify-center mb-6">
-            <RiCheckboxCircleFill className="w-10 h-10 text-brand-orange" />
-          </div>
-          <h2 className="text-3xl font-extrabold text-brand-orange mb-4">Berhasil!</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-md">
-            {resultMessage.text} Artikel Anda sekarang sudah ditayangkan di sistem.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button onClick={resetForm} className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-8 py-4 font-semibold text-base shadow-sm border-none transition-all">
-              Tulis Artikel Lain
-            </Button>
-            <Button 
-              variant="secondary"
-              onClick={() => router.push("/admin/artikel")} 
-              className="bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-2xl px-8 py-4 font-semibold text-base border border-gray-200 transition-all"
-            >
-              Kembali ke Daftar
-            </Button>
-          </div>
-        </div>
+      {/* Status Modal */}
+      {resultMessage && (
+        <StatusModal 
+          isOpen={!!resultMessage}
+          type={resultMessage.type}
+          title={resultMessage.type === "success" ? "Tersimpan!" : "Gagal"}
+          message={resultMessage.text}
+          primaryAction={{
+            label: "Kembali ke Daftar",
+            onClick: () => router.push("/admin/artikel")
+          }}
+          secondaryAction={resultMessage.type === "success" ? {
+            label: "Tulis Artikel Lain",
+            onClick: resetForm
+          } : {
+            label: "Tutup",
+            onClick: resetForm
+          }}
+        />
       )}
-
-      {/* Form Content */}
       <div className={resultMessage?.type === "success" ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-brand-orange mb-3">Tulis Artikel Baru</h1>
           <p className="text-gray-600">Publikasikan kegiatan, pengumuman, atau berita terbaru.</p>
-        </div>
-        
-        {resultMessage?.type === "error" && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-8 text-sm border border-red-200">
-            {resultMessage.text}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+        </div>        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
           {/* Informasi Dasar */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Informasi Dasar</h3>

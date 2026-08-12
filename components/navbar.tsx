@@ -8,6 +8,7 @@ import { RiMenuLine } from "@remixicon/react"
 
 const routes = [
   { href: "/", label: "Beranda" },
+  { href: "/tentang", label: "Tentang Kami" },
   { href: "/program", label: "Program" },
   { href: "/guru", label: "Guru" },
   { href: "/artikel", label: "Artikel" },

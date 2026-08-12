@@ -35,18 +35,18 @@ export default function ArticleActions({ id }: ArticleActionsProps) {
       <div className="flex items-center justify-end gap-2">
         <Link 
           href={`/admin/artikel/${id}/edit`}
-          className="p-2 text-gray-500 hover:text-brand-orange hover:bg-brand-yellow/20 rounded-lg transition-colors"
+          className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200 shadow-sm"
           title="Edit Artikel"
         >
-          <RiEdit2Line className="w-5 h-5" />
+          <RiEdit2Line className="w-4 h-4" />
         </Link>
         <button 
           onClick={() => setIsModalOpen(true)}
           disabled={isDeleting}
-          className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+          className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-200 shadow-sm disabled:opacity-50"
           title="Hapus Artikel"
         >
-          <RiDeleteBinLine className="w-5 h-5" />
+          <RiDeleteBinLine className="w-4 h-4" />
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Badge } from "@tremor/react";
-import { RiArrowLeftSLine, RiArrowRightSLine, RiArrowRightLine } from "@remixicon/react";
+import { RiArrowLeftSLine, RiArrowRightSLine, RiEyeLine } from "@remixicon/react";
 import Link from "next/link";
 import PPDBFilters from "./ppdb-filters";
 
@@ -99,11 +99,15 @@ export default async function AdminPPDBPage(props: { searchParams: Promise<{ pag
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Link href={`/admin/ppdb/${ppdb.id}`}>
-                        <button className="text-brand-orange hover:text-brand-orange/80 font-bold text-sm flex items-center justify-end gap-1 ml-auto transition-colors">
-                          Lihat Detail <RiArrowRightLine className="w-4 h-4" />
-                        </button>
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link 
+                          href={`/admin/ppdb/${ppdb.id}`}
+                          className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200 shadow-sm"
+                          title="Lihat Detail"
+                        >
+                          <RiEyeLine className="w-4 h-4" />
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

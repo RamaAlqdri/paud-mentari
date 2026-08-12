@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { submitPPDB } from "@/actions/ppdb";
 import { Button, Card, TextInput } from "@tremor/react";
-import { RiCheckboxCircleFill, RiSendPlaneFill, RiArrowDownSLine } from "@remixicon/react";
+import { RiSendPlaneFill, RiArrowDownSLine } from "@remixicon/react";
+import { StatusModal } from "@/components/status-modal";
 
 const ppdbSchema = z.object({
   childName: z.string().min(2, "Nama Anak minimal 2 karakter"),
@@ -66,20 +67,22 @@ export default function PPDBFormClient() {
 
   return (
     <Card className="w-full max-w-3xl bg-white rounded-[2rem] p-8 md:p-12 border border-gray-200 shadow-sm relative overflow-hidden mx-auto">
-      {/* Success State Overlay */}
-      {resultMessage?.type === "success" && (
-        <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-8 text-center animate-[fadeIn_0.5s_ease-out]">
-          <div className="w-20 h-20 bg-brand-yellow/20 rounded-full flex items-center justify-center mb-6">
-            <RiCheckboxCircleFill className="w-10 h-10 text-brand-orange" />
-          </div>
-          <h2 className="text-3xl font-extrabold text-brand-orange mb-4">Pendaftaran Berhasil!</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-md">
-            {resultMessage.text}. Tim kami akan segera menghubungi Anda untuk proses selanjutnya.
-          </p>
-          <Button onClick={resetForm} className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-8 py-4 font-semibold text-base shadow-sm border-none transition-all">
-            Daftar Siswa Lain
-          </Button>
-        </div>
+      {/* Status Modal */}
+      {resultMessage && (
+        <StatusModal 
+          isOpen={!!resultMessage}
+          type={resultMessage.type}
+          title={resultMessage.type === "success" ? "Pendaftaran Berhasil!" : "Gagal"}
+          message={
+            resultMessage.type === "success" 
+              ? `${resultMessage.text}. Tim kami akan segera menghubungi Anda untuk proses selanjutnya.` 
+              : resultMessage.text
+          }
+          primaryAction={{
+            label: resultMessage.type === "success" ? "Daftar Siswa Lain" : "Tutup",
+            onClick: resetForm
+          }}
+        />
       )}
 
       {/* Form Content */}
@@ -87,15 +90,7 @@ export default function PPDBFormClient() {
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-brand-orange mb-3">Formulir Pendaftaran Siswa Baru</h1>
           <p className="text-gray-600">Silakan lengkapi data diri calon siswa dan orang tua di bawah ini.</p>
-        </div>
-        
-        {resultMessage?.type === "error" && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-8 text-sm border border-red-200">
-            {resultMessage.text}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+        </div>        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
           {/* Data Anak */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Data Calon Siswa</h3>

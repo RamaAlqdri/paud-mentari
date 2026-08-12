@@ -2,8 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { Card, Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell } from "@tremor/react";
 import ProgramFilters from "./program-filters";
 import ProgramActions from "./program-actions";
-import Image from "next/image";
-
 export default async function AdminProgramPage(props: { searchParams: Promise<{ search?: string, category?: string, status?: string }> }) {
   const searchParams = await props.searchParams;
   const search = searchParams.search || "";
@@ -65,22 +63,11 @@ export default async function AdminProgramPage(props: { searchParams: Promise<{ 
                 data.map((item) => (
                   <TableRow key={item.id} className={`hover:bg-gray-50/50 transition-colors ${!item.isActive ? 'bg-gray-50/30' : ''}`}>
                     <TableCell className="py-4 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-gray-200 bg-white flex items-center justify-center ${!item.isActive ? 'grayscale opacity-60' : ''}`}>
-                          {item.thumbnail ? (
-                            <Image src={item.thumbnail} alt={item.title} width={48} height={48} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full bg-orange-100 text-brand-orange flex items-center justify-center font-bold text-sm">
-                              {item.title.charAt(0)}
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <p className={`font-bold text-base ${!item.isActive ? 'text-gray-500 line-through decoration-gray-400' : 'text-gray-900'}`}>
-                            {item.title}
-                          </p>
-                          <p className="text-sm text-gray-500 mt-0.5 max-w-xs truncate">{item.description}</p>
-                        </div>
+                      <div>
+                        <p className={`font-bold text-base ${!item.isActive ? 'text-gray-500 line-through decoration-gray-400' : 'text-gray-900'}`}>
+                          {item.title}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-0.5 max-w-xs truncate">{item.description}</p>
                       </div>
                     </TableCell>
                     

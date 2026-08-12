@@ -219,7 +219,55 @@ async function main() {
   }
   console.log('Teacher data seeded successfully');
 
-  console.log('PPDB data seeded successfully');
+  // Seed Program
+  const programData = [
+    {
+      title: 'Bermain Sambil Belajar',
+      slug: 'bermain-sambil-belajar',
+      description: 'Program kurikulum inti yang menekankan pada pendekatan bermain untuk merangsang kognitif, motorik, dan sosial emosional anak secara terpadu.',
+      category: 'Intrakurikuler',
+      isActive: true,
+    },
+    {
+      title: 'Seni Tari Tradisional',
+      slug: 'seni-tari-tradisional',
+      description: 'Kegiatan ekstrakurikuler mingguan untuk mengenalkan kekayaan budaya nusantara sejak dini melalui gerakan tari sederhana.',
+      category: 'Ekstrakurikuler',
+      isActive: true,
+    },
+    {
+      title: 'Kemandirian Usia Dini',
+      slug: 'kemandirian-usia-dini',
+      description: 'Program pembiasaan harian yang mengajarkan anak-anak untuk mandiri dalam hal-hal dasar seperti memakai sepatu, merapikan mainan, dan makan sendiri.',
+      category: 'Pengembangan Diri',
+      isActive: true,
+    },
+    {
+      title: 'Konsultasi Psikologi Tumbuh Kembang',
+      slug: 'konsultasi-psikologi',
+      description: 'Layanan konsultasi bulanan bagi orang tua bersama psikolog profesional untuk memantau perkembangan dan psikologi anak.',
+      category: 'Layanan Khusus',
+      isActive: true,
+    },
+    {
+      title: 'Mewarnai dan Menggambar Ceria',
+      slug: 'mewarnai-menggambar-ceria',
+      description: 'Eksplorasi kreativitas menggunakan berbagai media seni untuk melatih motorik halus dan pengenalan warna.',
+      category: 'Ekstrakurikuler',
+      isActive: true,
+    }
+  ];
+
+  for (const data of programData) {
+    await prisma.program.upsert({
+      where: { slug: data.slug },
+      update: {},
+      create: data,
+    });
+  }
+  console.log('Program data seeded successfully');
+
+  console.log('All data seeded successfully');
   console.log({ admin })
 }
 

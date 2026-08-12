@@ -1,12 +1,12 @@
 "use client";
 
-import { RiEdit2Line, RiDeleteBin6Line, RiToggleLine } from "@remixicon/react";
+import { RiEdit2Line, RiDeleteBin6Line, RiToggleLine, RiEyeLine } from "@remixicon/react";
 import Link from "next/link";
-import { deleteProgram, toggleProgramStatus } from "@/actions/admin-crud";
+import { deleteSiswa, toggleSiswaStatus } from "@/actions/admin-crud";
 import { useState } from "react";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 
-export default function ProgramActions({ id, isActive }: { id: string, isActive: boolean }) {
+export default function StudentActions({ id, isActive }: { id: string, isActive: boolean }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
   
@@ -15,14 +15,14 @@ export default function ProgramActions({ id, isActive }: { id: string, isActive:
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    await deleteProgram(id);
+    await deleteSiswa(id);
     setIsDeleting(false);
     setDeleteModalOpen(false);
   };
 
   const handleToggle = async () => {
     setIsToggling(true);
-    await toggleProgramStatus(id, isActive);
+    await toggleSiswaStatus(id, isActive);
     setIsToggling(false);
     setToggleModalOpen(false);
   };
@@ -40,15 +40,23 @@ export default function ProgramActions({ id, isActive }: { id: string, isActive:
               ? "bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100" 
               : "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
           } ${isToggling ? "opacity-50 cursor-not-allowed" : ""}`}
-          title={isActive ? "Nonaktifkan Program" : "Aktifkan Program"}
+          title={isActive ? "Nonaktifkan Siswa" : "Aktifkan Siswa"}
         >
           <RiToggleLine className="w-4 h-4" />
         </button>
 
         <Link 
-          href={`/admin/program/${id}/edit`}
+          href={`/admin/siswa/${id}`}
+          className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200 shadow-sm"
+          title="Lihat Detail Siswa"
+        >
+          <RiEyeLine className="w-4 h-4" />
+        </Link>
+
+        <Link 
+          href={`/admin/siswa/${id}/edit`}
           className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200 shadow-sm"
-          title="Edit Program"
+          title="Edit Data Siswa"
         >
           <RiEdit2Line className="w-4 h-4" />
         </Link>
@@ -57,7 +65,7 @@ export default function ProgramActions({ id, isActive }: { id: string, isActive:
           onClick={() => setDeleteModalOpen(true)}
           disabled={isDeleting}
           className={`p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-200 shadow-sm ${isDeleting ? "opacity-50 cursor-not-allowed" : ""}`}
-          title="Hapus Program"
+          title="Hapus Siswa"
         >
           <RiDeleteBin6Line className="w-4 h-4" />
         </button>
@@ -68,8 +76,8 @@ export default function ProgramActions({ id, isActive }: { id: string, isActive:
         onClose={() => !isDeleting && setDeleteModalOpen(false)}
         onConfirm={handleDelete}
         isLoading={isDeleting}
-        title="Hapus Program"
-        message="Apakah Anda yakin ingin menghapus program ini? Data tidak dapat dikembalikan."
+        title="Hapus Data Siswa"
+        message="Apakah Anda yakin ingin menghapus data siswa ini? Data tidak dapat dikembalikan."
         confirmText="Ya, Hapus"
       />
 
@@ -78,8 +86,8 @@ export default function ProgramActions({ id, isActive }: { id: string, isActive:
         onClose={() => !isToggling && setToggleModalOpen(false)}
         onConfirm={handleToggle}
         isLoading={isToggling}
-        title={`${isActive ? 'Nonaktifkan' : 'Aktifkan'} Program`}
-        message={`Apakah Anda yakin ingin ${actionText} program ini?`}
+        title={`${isActive ? 'Nonaktifkan' : 'Aktifkan'} Siswa`}
+        message={`Apakah Anda yakin ingin ${actionText} siswa ini?`}
         confirmText="Ya, Lanjutkan"
       />
     </>

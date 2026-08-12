@@ -7,33 +7,30 @@ export const metadata: Metadata = {
   description: "Profil tenaga pendidik di PAUD Mentari",
 };
 
-export default function GuruPage() {
-  const teachers = [
-    {
-      id: "1",
-      name: "Ibu Siti",
-      position: "Kepala Sekolah",
-      bio: "Dengan pengalaman lebih dari 10 tahun di bidang pendidikan anak usia dini, Ibu Siti memimpin PAUD Mentari dengan visi menciptakan generasi yang cerdas, kreatif, dan berbudi pekerti luhur.",
-      image: "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      badgeColor: "bg-brand-yellow/20 text-brand-orange"
-    },
-    {
-      id: "2",
-      name: "Pak Budi",
-      position: "Guru Kelas TK A",
-      bio: "Dikenal dengan pendekatannya yang kreatif dalam belajar sambil bermain, Pak Budi selalu berhasil membuat suasana kelas TK A penuh tawa dan semangat belajar yang tinggi.",
-      image: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      badgeColor: "bg-brand-blue/20 text-brand-blue"
-    },
-    {
-      id: "3",
-      name: "Ibu Ani",
-      position: "Guru Kelas TK B",
-      bio: "Keahlian Ibu Ani dalam literasi dan pembentukan karakter menjadikan kelas TK B tempat yang ideal bagi anak-anak untuk bersiap memasuki jenjang sekolah dasar dengan percaya diri.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      badgeColor: "bg-brand-pink/20 text-brand-pink"
-    }
-  ];
+import { prisma } from "@/lib/prisma";
+
+export default async function GuruPage() {
+  const dbTeachers = await prisma.teacher.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: "asc" }
+  });
+
+  const teachers = dbTeachers.map((teacher, index) => {
+    const badgeColors = [
+      "bg-brand-yellow/20 text-brand-orange",
+      "bg-brand-blue/20 text-brand-blue",
+      "bg-brand-pink/20 text-brand-pink"
+    ];
+    
+    return {
+      id: teacher.id,
+      name: `${teacher.firstName} ${teacher.lastName || ""}`.trim(),
+      position: teacher.employmentStatus,
+      bio: teacher.bio || "Berdedikasi untuk pendidikan anak usia dini.",
+      image: teacher.image || "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      badgeColor: badgeColors[index % 3]
+    };
+  });
 
   const values = [
     {

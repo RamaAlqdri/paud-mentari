@@ -10,34 +10,12 @@ export const metadata: Metadata = {
   description: "Kumpulan artikel dan berita terbaru dari PAUD Mentari",
 };
 
-export default function ArtikelPage() {
-  // Menggunakan data mock sementara (tanpa database) agar desain bisa dilihat
-  const articles = [
-    {
-      id: "1",
-      title: "Pentingnya Sensori Play untuk Perkembangan Motorik Anak",
-      slug: "pentingnya-sensori-play",
-      excerpt: "Mengenal berbagai aktivitas sensori yang dapat merangsang perkembangan otak dan motorik halus pada anak usia 3-5 tahun, serta cara mudah menerapkannya di rumah.",
-      thumbnail: "https://images.unsplash.com/photo-1594608661623-aa0bd3a0b1ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      createdAt: new Date("2024-05-12T00:00:00Z").toISOString(),
-    },
-    {
-      id: "2",
-      title: "Tips Membangun Kebiasaan Membaca Sejak Dini",
-      slug: "tips-membangun-kebiasaan-membaca",
-      excerpt: "Strategi praktis bagi orang tua untuk menjadikan kegiatan membaca buku sebagai rutinitas yang menyenangkan sebelum tidur.",
-      thumbnail: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      createdAt: new Date("2024-05-10T00:00:00Z").toISOString(),
-    },
-    {
-      id: "3",
-      title: "Ide Bekal Sehat yang Disukai Anak Prasekolah",
-      slug: "ide-bekal-sehat",
-      excerpt: "Resep mudah dan kreatif untuk memastikan si kecil mendapatkan nutrisi seimbang selama berada di sekolah.",
-      thumbnail: "https://images.unsplash.com/photo-1512152272829-e3139592d56f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      createdAt: new Date("2024-05-08T00:00:00Z").toISOString(),
-    },
-  ];
+import { prisma } from "@/lib/prisma";
+
+export default async function ArtikelPage() {
+  const articles = await prisma.article.findMany({
+    orderBy: { publishedAt: "desc" },
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-white pt-24">
@@ -63,8 +41,7 @@ export default function ArtikelPage() {
                 "bg-brand-pink/20 text-brand-pink",
               ];
               const badgeColor = badgeColors[index % 3];
-              // Sementara kita pakai kategori mock up untuk mencocokkan desain
-              const categoryName = ["Pendidikan", "Parenting", "Kesehatan"][index % 3];
+              const categoryName = article.category;
               
               if (isFeatured) {
                 return (
@@ -83,7 +60,7 @@ export default function ArtikelPage() {
                           {categoryName}
                         </Badge>
                         <span className="text-xs text-gray-500 font-medium">
-                          {format(new Date(article.createdAt), "dd MMMM yyyy", { locale: localeID })}
+                          {format(new Date(article.publishedAt || article.createdAt), "dd MMMM yyyy", { locale: localeID })}
                         </span>
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -123,7 +100,7 @@ export default function ArtikelPage() {
                         {categoryName}
                       </Badge>
                       <span className="text-xs text-gray-500 font-medium">
-                        {format(new Date(article.createdAt), "dd MMMM yyyy", { locale: localeID })}
+                        {format(new Date(article.publishedAt || article.createdAt), "dd MMMM yyyy", { locale: localeID })}
                       </span>
                     </div>
                     <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">

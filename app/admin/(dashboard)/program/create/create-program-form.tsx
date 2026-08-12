@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { createProgram } from "@/actions/admin-crud";
-import { Button, Card, TextInput, Select, SelectItem } from "@tremor/react";
-import { RiCheckboxCircleFill, RiSave3Fill } from "@remixicon/react";
+import { Button, Card, TextInput } from "@tremor/react";
+import { RiSendPlaneFill, RiArrowDownSLine } from "@remixicon/react";
+import Link from "next/link";
+import { StatusModal } from "@/components/status-modal";
 import { useRouter } from "next/navigation";
 
 const programSchema = z.object({
@@ -25,8 +27,8 @@ export default function CreateProgramForm() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
+    reset,
   } = useForm<ProgramFormValues>({
     resolver: zodResolver(programSchema),
     defaultValues: {
@@ -40,95 +42,121 @@ export default function CreateProgramForm() {
 
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
+      formData.append(key, value || "");
     });
 
     try {
       const result = await createProgram(formData);
+
       if (result.success) {
         setResultMessage({ type: "success", text: "Program berhasil ditambahkan." });
+        reset();
       } else {
         setResultMessage({ type: "error", text: result.message || "Gagal menambahkan program." });
       }
     } catch (err) {
-      setResultMessage({ type: "error", text: "Terjadi kesalahan." });
+      setResultMessage({ type: "error", text: "Terjadi kesalahan internal." });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const resetForm = () => {
+    setResultMessage(null);
+  };
+
   return (
-    <Card className="w-full bg-white rounded-2xl p-8 md:p-10 border border-gray-200 shadow-sm relative">
-      {resultMessage?.type === "success" && (
-        <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-8 text-center rounded-2xl animate-[fadeIn_0.5s_ease-out]">
-          <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
-            <RiCheckboxCircleFill className="w-10 h-10 text-emerald-600" />
-          </div>
-          <h2 className="text-3xl font-extrabold text-emerald-600 mb-4">Tersimpan!</h2>
-          <p className="text-lg text-gray-600 mb-8">{resultMessage.text}</p>
-          <div className="flex gap-4">
-            <Button onClick={() => router.push("/admin/program")} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl px-8 py-3 border-none">
-              Kembali ke Daftar
-            </Button>
-            <Button variant="secondary" onClick={() => window.location.reload()} className="bg-gray-50 text-gray-700 rounded-2xl px-8 py-3 border">
-              Tambah Lagi
-            </Button>
-          </div>
-        </div>
+    <Card className="w-full max-w-5xl bg-white rounded-2xl p-8 md:p-10 border border-gray-200 shadow-sm relative overflow-hidden mx-auto">
+      {/* Status Modal */}
+      {resultMessage && (
+        <StatusModal 
+          isOpen={!!resultMessage}
+          type={resultMessage.type}
+          title={resultMessage.type === "success" ? "Tersimpan!" : "Gagal"}
+          message={resultMessage.text}
+          primaryAction={{
+            label: "Kembali ke Daftar",
+            onClick: () => router.push("/admin/program")
+          }}
+          secondaryAction={resultMessage.type === "success" ? {
+            label: "Tambah Program Lain",
+            onClick: resetForm
+          } : {
+            label: "Tutup",
+            onClick: resetForm
+          }}
+        />
       )}
+      <div className={resultMessage?.type === "success" ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-brand-orange mb-3">Tambah Program Baru</h1>
+          <p className="text-gray-600">Lengkapi form berikut untuk mendaftarkan program sekolah baru.</p>
+        </div>        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+          {/* Informasi Dasar */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Informasi Program</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2 md:col-span-2">
+                <label htmlFor="title" className="text-sm font-semibold text-gray-900">Nama Program *</label>
+                <TextInput id="title" placeholder="Contoh: Menggambar Ceria" {...register("title")} />
+                {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
+              </div>
 
-      <div className={resultMessage?.type === "success" ? "opacity-0" : "opacity-100"}>
-        <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-brand-orange mb-2">Tambah Program Baru</h1>
-          <p className="text-gray-600">Lengkapi form berikut untuk menambahkan program unggulan sekolah.</p>
-        </div>
-        
-        {resultMessage?.type === "error" && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm border border-red-200">
-            {resultMessage.text}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-semibold text-gray-900 block mb-2">Nama Program *</label>
-              <TextInput placeholder="Contoh: Menggambar Ceria" {...register("title")} />
-              {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
-            </div>
-            
-            <div>
-              <label className="text-sm font-semibold text-gray-900 block mb-2">Kategori *</label>
-              <Select defaultValue="Intrakurikuler" onValueChange={(val) => setValue("category", val)}>
-                <SelectItem value="Intrakurikuler">Intrakurikuler</SelectItem>
-                <SelectItem value="Ekstrakurikuler">Ekstrakurikuler</SelectItem>
-                <SelectItem value="Pengembangan Diri">Pengembangan Diri</SelectItem>
-                <SelectItem value="Layanan Khusus">Layanan Khusus</SelectItem>
-              </Select>
-              {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>}
-            </div>
-
-            <div>
-              <label className="text-sm font-semibold text-gray-900 block mb-2">Deskripsi Program *</label>
-              <textarea 
-                rows={5}
-                className="flex w-full rounded-tremor-default border border-tremor-border bg-tremor-background px-3 py-2 text-sm shadow-tremor-input focus:border-tremor-brand-subtle focus:ring-tremor-brand-muted"
-                placeholder="Tuliskan deskripsi atau penjelasan lengkap tentang program ini..."
-                {...register("description")}
-              />
-              {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="category" className="text-sm font-semibold text-gray-900">Kategori Program *</label>
+                <div className="relative">
+                  <select 
+                    id="category" 
+                    className="flex h-10 w-full rounded-tremor-default border border-tremor-border bg-tremor-background pl-3 pr-10 py-2 text-sm shadow-tremor-input focus:border-tremor-brand-subtle focus:ring-tremor-brand-muted appearance-none"
+                    {...register("category")}
+                  >
+                    <option value="">Pilih Kategori...</option>
+                    <option value="Intrakurikuler">Intrakurikuler</option>
+                    <option value="Ekstrakurikuler">Ekstrakurikuler</option>
+                    <option value="Pengembangan Diri">Pengembangan Diri</option>
+                    <option value="Layanan Khusus">Layanan Khusus</option>
+                  </select>
+                  <RiArrowDownSLine className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
+                {errors.category && <p className="text-red-500 text-xs">{errors.category.message}</p>}
+              </div>
             </div>
           </div>
 
-          <div className="pt-6 flex justify-end gap-4">
+          {/* Konten Utama */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Deskripsi Detail</h3>
+            <div className="grid grid-cols-1 gap-6">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="description" className="text-sm font-semibold text-gray-900">Deskripsi Program *</label>
+                <textarea 
+                  id="description" 
+                  rows={6}
+                  className="flex w-full rounded-tremor-default border border-tremor-border bg-tremor-background px-3 py-2 text-sm shadow-tremor-input focus:border-tremor-brand-subtle focus:ring-tremor-brand-muted"
+                  placeholder="Tuliskan penjelasan lengkap mengenai program, tujuan, dan kegiatannya..."
+                  {...register("description")}
+                />
+                {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Action */}
+          <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <Link 
+              href="/admin/program"
+              className="text-gray-500 font-medium hover:text-gray-900 transition-colors"
+            >
+              Batal
+            </Link>
             <Button 
               type="submit" 
               disabled={isSubmitting} 
-              className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-xl px-8 py-3 border-none"
+              className="bg-brand-orange hover:bg-brand-orange/90 text-white rounded-2xl px-8 py-4 font-semibold text-base shadow-sm hover:shadow transition-all border-none w-full sm:w-auto"
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 {isSubmitting ? "Menyimpan..." : "Simpan Program"}
-                {!isSubmitting && <RiSave3Fill className="w-5 h-5" />}
+                {!isSubmitting && <RiSendPlaneFill className="w-5 h-5" />}
               </span>
             </Button>
           </div>
